@@ -33,6 +33,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-autodba}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-autodba}
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-autodba}:${POSTGRES_PASSWORD:-autodba}@postgres:5432/${POSTGRES_DB:-autodba}
+      GROQ_API_KEY: ${GROQ_API_KEY}
     ports:
       - "8000:8000"
     depends_on:
@@ -45,6 +46,8 @@ services:
     image: node:22-alpine
     working_dir: /app
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      VITE_BACKEND_URL: http://backend:8000
     ports:
       - "5173:5173"
     volumes:
@@ -54,3 +57,10 @@ services:
 
 volumes:
   pgdata:
+
+
+
+
+
+
+

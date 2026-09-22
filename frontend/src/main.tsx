@@ -1,8 +1,14 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './style.css';
+import App from './App';
 
-function App() {
-  return <main><h1>AutoDBA</h1><p>PostgreSQL Performance Engineering Console</p><div className="card"><b>System status</b><span>● Ready</span></div></main>
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
 }
-createRoot(document.getElementById('root')!).render(<App />)

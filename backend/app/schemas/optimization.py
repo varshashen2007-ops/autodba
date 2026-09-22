@@ -609,7 +609,365 @@ class BenchmarkResult(BaseModel):
 
     model_config = {"populate_by_name": True}
 
+# ---------------------------------------------------------------------------
+# Phase 4.1: RAG / LLM Intelligence Schemas
+# ---------------------------------------------------------------------------
+
+class OptimizationOutcome(str, Enum):
+    """Outcome of an optimization after physical remediation and benchmarking."""
+    SUCCESS = "success"
+    NO_IMPROVEMENT = "no_improvement"
+    REGRESSION = "regression"
+    FAILED = "failed"
+    REJECTED = "rejected"
+    NOT_BENCHMARKED = "not_benchmarked"
+
+
+class OptimizationMemory(BaseModel):
+    """Historical optimization case stored for future retrieval."""
+
+    id: Optional[int] = Field(
+        None,
+        description="Unique identifier of the stored optimization memory",
+    )
+    incident_type: str = Field(
+        ...,
+        description="Type of database performance incident",
+    )
+    query_fingerprint: Optional[str] = Field(
+        None,
+        description="Stable fingerprint identifying the query pattern",
+    )
+    query_text: str = Field(
+        ...,
+        description="Original SQL query associated with the incident",
+    )
+    diagnosis: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Deterministic diagnosis and plan evidence",
+    )
+    recommendation: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Optimization recommendation",
+    )
+    validation: Optional[Dict[str, Any]] = Field(
+        None,
+        description="HypoPG validation evidence",
+    )
+    benchmark: Optional[Dict[str, Any]] = Field(
+        None,
+        description="Real runtime benchmark evidence",
+    )
+    outcome: OptimizationOutcome = Field(
+        ...,
+        description="Observed outcome after the optimization workflow",
+    )
+    outcome_summary: Optional[str] = Field(
+        None,
+        description="Human-readable summary of the optimization outcome",
+    )
+    embedding: List[float] = Field(
+        default_factory=list,
+        description="Vector embedding used for semantic similarity search",
+    )
+    created_at: Optional[datetime] = Field(
+        None,
+        description="Timestamp when the memory was created",
+    )
+    updated_at: Optional[datetime] = Field(
+        None,
+        description="Timestamp when the memory was last updated",
+    )
+
+    model_config = {"populate_by_name": True}
+
+
+class OptimizationOutcomeRecord(BaseModel):
+    """Structured outcome record produced after an optimization benchmark."""
+
+    outcome: OptimizationOutcome = Field(
+        ...,
+        description="Observed optimization outcome",
+    )
+    outcome_summary: str = Field(
+        ...,
+        description="Concise explanation of the observed outcome",
+    )
+    incident_type: str = Field(
+        "unknown",
+        description="Deterministic incident classification",
+    )
+    query_text: str = Field(
+        "",
+        description="SQL query associated with the optimization",
+    )
+    diagnosis: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Deterministic diagnosis evidence",
+    )
+    recommendation: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Deterministic optimization recommendation",
+    )
+    validation: Optional[Dict[str, Any]] = Field(
+        None,
+        description="HypoPG/safety validation evidence",
+    )
+    benchmark_id: Optional[str] = Field(
+        None,
+        description="Associated benchmark identifier",
+    )
+    remediation_id: Optional[str] = Field(
+        None,
+        description="Associated remediation identifier",
+    )
+    planner_cost_improvement_percent: Optional[float] = Field(
+        None,
+        description="Measured planner cost improvement percentage",
+    )
+    runtime_improvement_percent: Optional[float] = Field(
+        None,
+        description="Measured runtime improvement percentage",
+    )
+    plan_changed: Optional[bool] = Field(
+        None,
+        description="Whether the execution plan changed",
+    )
+    index_usage_changed: Optional[bool] = Field(
+        None,
+        description="Whether index usage changed",
+    )
+
+
+class SimilarCase(BaseModel):
+    """A historically similar optimization case retrieved from memory."""
+
+    memory_id: int = Field(
+        ...,
+        description="Identifier of the historical memory",
+    )
+    incident_type: str = Field(
+        ...,
+        description="Historical incident type",
+    )
+    query_text: str = Field(
+        ...,
+        description="Historical SQL query",
+    )
+    outcome: OptimizationOutcome = Field(
+        ...,
+        description="Historical optimization outcome",
+    )
+    outcome_summary: Optional[str] = Field(
+        None,
+        description="Historical outcome summary",
+    )
+    similarity: float = Field(
+        ...,
+        ge=0.0,
+        le=1.0,
+        description="Cosine similarity to the current incident",
+    )
+    diagnosis: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Historical diagnosis evidence",
+    )
+    recommendation: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Historical recommendation",
+    )
+    benchmark: Optional[Dict[str, Any]] = Field(
+        None,
+        description="Historical benchmark evidence",
+    )
+
+
+class RAGContext(BaseModel):
+    """Retrieved historical context supplied to the intelligence layer."""
+
+    query: str = Field(
+        ...,
+        description="Current query being investigated",
+    )
+    incident_type: str = Field(
+        ...,
+        description="Current incident type",
+    )
+    similar_cases: List[SimilarCase] = Field(
+        default_factory=list,
+        description="Most similar historical optimization cases",
+    )
+    retrieval_count: int = Field(
+        0,
+        description="Number of historical cases retrieved",
+    )
+    retrieval_threshold: float = Field(
+        0.0,
+        ge=0.0,
+        le=1.0,
+        description="Minimum similarity threshold used during retrieval",
+    )
+
+
+class DiagnosisResult(BaseModel):
+    """Deterministic diagnosis enriched with historical context."""
+
+    query: str = Field(
+        ...,
+        description="SQL query being diagnosed",
+    )
+    incident_type: str = Field(
+        ...,
+        description="Detected performance incident type",
+    )
+    analysis: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Deterministic execution-plan analysis",
+    )
+    findings: List[Dict[str, Any]] = Field(
+        default_factory=list,
+        description="Detected bottleneck findings",
+    )
+    recommendation: Optional[Dict[str, Any]] = Field(
+        None,
+        description="Deterministic optimization recommendation",
+    )
+    rag_context: Optional[RAGContext] = Field(
+        None,
+        description="Relevant historical cases",
+    )
+
+
+class DiagnoseRequest(BaseModel):
+    """Request to diagnose a database performance incident."""
+
+    query: str = Field(
+        ...,
+        min_length=1,
+        description="Read-only SQL query to diagnose",
+    )
+    incident_type: Optional[str] = Field(
+        None,
+        description="Optional incident type hint",
+    )
+    include_rag: bool = Field(
+        True,
+        description="Whether to retrieve similar historical optimization cases",
+    )
+    max_similar_cases: int = Field(
+        5,
+        ge=1,
+        le=20,
+        description="Maximum number of historical cases to retrieve",
+    )
+
+
+class DiagnoseResponse(BaseModel):
+    """Complete intelligence-layer diagnosis response."""
+
+    diagnosis: DiagnosisResult = Field(
+        ...,
+        description="Deterministic diagnosis",
+    )
+    llm_explanation: Optional[str] = Field(
+        None,
+        description="Optional LLM-generated explanation grounded in evidence",
+    )
+    llm_provider: Optional[str] = Field(
+        None,
+        description="LLM provider used to generate the explanation",
+    )
+
+
+class MemoryListItem(BaseModel):
+    """Compact representation of a stored optimization memory."""
+
+    id: int
+    incident_type: str
+    query_fingerprint: Optional[str] = None
+    query_text: str
+    outcome: OptimizationOutcome
+    outcome_summary: Optional[str] = None
+    created_at: Optional[datetime] = None
+
+
+class MemorySearchRequest(BaseModel):
+    """Request for semantic historical optimization search."""
+
+    query: str = Field(
+        ...,
+        min_length=1,
+        description="Query or incident description to search for",
+    )
+    incident_type: Optional[str] = Field(
+        None,
+        description="Optional incident type filter",
+    )
+    limit: int = Field(
+        5,
+        ge=1,
+        le=50,
+        description="Maximum number of similar cases to return",
+    )
+    similarity_threshold: float = Field(
+        0.0,
+        ge=0.0,
+        le=1.0,
+        description="Minimum cosine similarity required",
+    )
+
+
+class MemorySearchResponse(BaseModel):
+    """Semantic search response containing similar historical cases."""
+
+    query: str
+    results: List[SimilarCase] = Field(
+        default_factory=list,
+    )
+    total: int = Field(
+        0,
+        description="Number of results returned",
+    )
 
 
 
 
+
+
+# ---------------------------------------------------------------
+# Phase 4.2: Closed-Loop Self-Improvement Schemas
+# ---------------------------------------------------------------
+
+class ClosedLoopRequest(BaseModel):
+    """Request to execute the post-approval optimization feedback loop."""
+
+    approval_id: str = Field(
+        ...,
+        description="Existing human-approved optimization approval ID",
+    )
+    query_text: str = Field(
+        ...,
+        description="Validated read-only SQL query to benchmark",
+    )
+    incident_type: str = Field(
+        "unknown",
+        description="Deterministic incident classification",
+    )
+    diagnosis: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Deterministic diagnosis evidence associated with the approval",
+    )
+    recommendation: Optional[OptimizationRecommendation] = Field(
+        None,
+        description="Optional current recommendation snapshot for integrity verification",
+    )
+
+
+class ClosedLoopResponse(BaseModel):
+    """Complete auditable result of a closed-loop optimization."""
+
+    approval: ApprovalRequest
+    remediation: RemediationResult
+    benchmark: BenchmarkResult
+    outcome: OptimizationOutcome
+    memory: OptimizationMemory
