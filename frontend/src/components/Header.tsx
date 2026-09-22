@@ -67,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, health, totalMemorie
       <div className="header-actions">
         <div className="badge badge-purple" title="LLM Advisory Reasoning Layer">
           <Sparkles size={12} />
-          <span>Groq Llama 3.3 70B</span>
+          <span>Groq · openai/gpt-oss-120b</span>
         </div>
 
         <div className="badge badge-blue" title="Persistent Memory Corpus">

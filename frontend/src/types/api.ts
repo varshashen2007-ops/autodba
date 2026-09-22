@@ -198,7 +198,7 @@ export interface BenchmarkResult {
 
 export interface SimilarCase {
   memory_id: number;
-  similarity_score: number;
+  similarity: number;
   incident_type: string;
   query_text: string;
   diagnosis: Record<string, any>;

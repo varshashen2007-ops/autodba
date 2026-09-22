@@ -60,7 +60,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </h2>
           <p style={{ fontSize: '13.5px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
             AutoDBA continuously investigates PostgreSQL slow queries, retrieves historical remediation memories via RAG,
-            reasons with Groq Llama 3.3, validates in-memory with HypoPG, enforces 7 safety rules, requires explicit human approval,
+            reasons with Groq · openai/gpt-oss-120b, validates in-memory with HypoPG, enforces 7 safety rules, requires explicit human approval,
             and benchmarks the empirical runtime speedup.
           </p>
         </div>
@@ -94,7 +94,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             {isConnected ? 'PostgreSQL 17' : 'Offline'}
           </div>
           <div className="metric-meta">
-            {health?.extensions ? health.extensions.join(' • ') : 'Extensions loading...'}
+            {health?.extensions ? health.extensions.join(' â€¢ ') : 'Extensions loading...'}
           </div>
         </div>
 
@@ -119,7 +119,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             87.9%
           </div>
           <div className="metric-meta">
-            <span>0.1289 ms → 0.0156 ms (8.26x)</span>
+            <span>0.1289 ms â†’ 0.0156 ms (8.26x)</span>
           </div>
         </div>
 

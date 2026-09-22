@@ -157,7 +157,7 @@ export const IntelligenceView: React.FC = () => {
             <h4 style={{ fontSize: '14px', fontWeight: 600 }}>Grounded LLM Reasoning</h4>
           </div>
           <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-            Retrieved historical cases are injected directly into Groq Llama 3.3 context windows.
+            Retrieved historical cases are injected directly into Groq · openai/gpt-oss-120b context windows.
             The LLM synthesizes evidence from both the live PostgreSQL EXPLAIN plan and previous measured outcomes.
           </p>
         </div>

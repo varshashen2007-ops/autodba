@@ -74,7 +74,7 @@ export const InvestigateView: React.FC<InvestigateViewProps> = ({
       setLoadingStep('4/5 Retrieving similar historical memories via cosine similarity RAG...');
       await new Promise((r) => setTimeout(r, 250));
 
-      setLoadingStep('5/5 Querying Groq Llama 3.3 70B for evidence-grounded diagnosis...');
+      setLoadingStep('5/5 Querying Groq · openai/gpt-oss-120b for evidence-grounded diagnosis...');
 
       const response = await api.diagnoseQuery({
         query: queryToRun.trim(),

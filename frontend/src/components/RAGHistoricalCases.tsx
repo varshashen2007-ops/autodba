@@ -45,7 +45,7 @@ export const RAGHistoricalCases: React.FC<RAGHistoricalCasesProps> = ({
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '14px' }}>
         {cases.map((c, i) => {
-          const simPct = Math.round(c.similarity_score * 100);
+          const simPct = Math.round(c.similarity * 100);
           const isSuccess = c.outcome === 'success';
           const runtimeImp = c.benchmark?.runtime_improvement_percent;
           const plannerImp = c.benchmark?.planner_cost_improvement_percent;
