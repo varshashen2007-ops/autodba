@@ -1,0 +1,56 @@
+services:
+  postgres:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    command:
+      - postgres
+      - -c
+      - shared_preload_libraries=pg_stat_statements
+      - -c
+      - pg_stat_statements.track=all
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-autodba}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-autodba}
+      POSTGRES_DB: ${POSTGRES_DB:-autodba}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-autodba} -d ${POSTGRES_DB:-autodba}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-autodba}
+      POSTGRES_USER: ${POSTGRES_USER:-autodba}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-autodba}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-autodba}:${POSTGRES_PASSWORD:-autodba}@postgres:5432/${POSTGRES_DB:-autodba}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
