@@ -19,11 +19,14 @@ This service orchestrates existing services only. It does not:
 
 from __future__ import annotations
 
+import warnings
 from typing import Any, Dict, Optional
 
 from sqlalchemy.engine import Engine
+from sqlalchemy.exc import SAWarning
 
 from app.core.config import Settings, get_settings
+from app.core.logging import logger
 from app.db.database import engine as default_engine
 from app.schemas.optimization import (
     ApprovalRequest,
@@ -153,6 +156,12 @@ class ClosedLoopService:
             else OutcomeVerificationState.UNVERIFIED
         )
 
+        # The caller's session may still hold the (read-only) transaction that
+        # diagnosis opened on its connection, and that transaction can be left
+        # deassociated by session-scoped HypoPG validation. Discard it so the
+        # memory INSERT below starts on a clean, active transaction.
+        self._reset_read_transaction()
+
         memory = self.memory_service.create_memory(
             incident_type=incident_type,
             query_text=query_text,
@@ -174,6 +183,30 @@ class ClosedLoopService:
             "outcome": memory.outcome,
             "memory": memory,
         }
+
+    def _reset_read_transaction(self) -> None:
+        """Discard any read-only transaction left on the caller's session.
+
+        Diagnosis runs session-scoped HypoPG validation on the caller's
+        connection, and controlled remediation executes DDL on independent
+        connections. Either step can leave the caller's SQLAlchemy transaction
+        deassociated from its connection, which makes the subsequent memory
+        INSERT's ``commit()`` raise ``InvalidRequestError: This transaction is
+        inactive``. Resetting the (read-only) transaction discards no pending
+        writes and guarantees a clean transaction for persisting the memory.
+        """
+        try:
+            with warnings.catch_warnings():
+                # ``Session.rollback()`` emits a harmless SAWarning when the
+                # transaction was already deassociated from its connection.
+                warnings.simplefilter("ignore", SAWarning)
+                self.db.rollback()
+        except Exception as exc:  # pragma: no cover - defensive fallback
+            logger.warning(
+                "Failed to reset caller session transaction before memory "
+                "persistence: %s",
+                exc,
+            )
 
     @staticmethod
     def _build_outcome_summary(benchmark: BenchmarkResult) -> str:

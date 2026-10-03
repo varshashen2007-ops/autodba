@@ -16,12 +16,25 @@ def pytest_configure(config):
 
 
 def pytest_sessionstart(session):
-    """Ensure baseline clean database state before executing the test session."""
+    """Ensure baseline clean database state before executing the test session.
+
+    Any physical index previously created by AutoDBA remediation is removed so
+    the suite-wide "no new physical indexes" invariants start from a clean,
+    deterministic state regardless of what ran before (closed loop, manual
+    remediation, or a previous test session).
+    """
     try:
         from app.db.database import engine
         from sqlalchemy import text
         with engine.begin() as conn:
-            conn.execute(text("DROP INDEX IF EXISTS idx_autodba_orders_customer_id;"))
+            rows = conn.execute(
+                text(
+                    "SELECT indexname FROM pg_indexes "
+                    "WHERE indexname LIKE 'idx_autodba_%'"
+                )
+            ).fetchall()
+            for (indexname,) in rows:
+                conn.execute(text(f'DROP INDEX IF EXISTS "{indexname}";'))
     except Exception:
         pass
 

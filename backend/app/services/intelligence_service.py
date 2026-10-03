@@ -6,6 +6,9 @@ historical RAG retrieval, and advisory LLM explanation layer.
 
 The deterministic engine remains authoritative.
 The LLM cannot execute SQL, approve remediation, or bypass safety controls.
+The LLM explanation layer is also strictly fail-soft: a provider failure
+(rate limit, oversized request, network error) must never break the
+deterministic diagnosis, so it degrades to "no explanation available".
 """
 
 from __future__ import annotations
@@ -133,7 +136,7 @@ class IntelligenceService:
         similar_cases: list[Dict[str, Any]] = []
         if rag_context:
             similar_cases = [
-                case.model_dump(mode="json")
+                self._to_llm_historical_case(case)
                 for case in rag_context.similar_cases
             ]
 
@@ -152,6 +155,32 @@ class IntelligenceService:
             llm_explanation=llm_explanation,
             llm_provider="groq",
         )
+
+    @staticmethod
+    def _to_llm_historical_case(case: Any) -> Dict[str, Any]:
+        """Project a retrieved memory into a compact, LLM-safe historical summary.
+
+        The full ``SimilarCase`` payload embeds the raw EXPLAIN plan and the
+        complete benchmark evidence (multi-MB for real measured cases), which
+        overflows the LLM provider request-size limit and hard-fails the whole
+        diagnosis. The advisory explanation only needs the case identity,
+        outcome, and provenance, so the heavy deterministic blobs are omitted.
+        The full evidence remains available in the deterministic response.
+        """
+        return {
+            "memory_id": getattr(case, "memory_id", None),
+            "incident_type": case.incident_type,
+            "query_text": case.query_text,
+            "outcome": getattr(case.outcome, "value", case.outcome),
+            "outcome_summary": case.outcome_summary,
+            "provenance": getattr(case.provenance, "value", case.provenance),
+            "is_verified": case.is_verified,
+            "verification_state": getattr(
+                case.verification_state, "value", case.verification_state
+            ),
+            "similarity": round(case.similarity, 4),
+            "recommendation": case.recommendation,
+        }
 
     def _evaluate_candidates(
         self,
