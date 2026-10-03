@@ -1,0 +1,266 @@
+{
+  "cases": [
+    {
+      "canonical_template": "select * from orders where customer_id = ?",
+      "case_id": "CASE-T1-01",
+      "is_verified": true,
+      "memory_id": 1,
+      "partition": "TRAIN",
+      "primary_candidate_key": "orders:btree:customer_id",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM orders WHERE customer_id = 42;",
+      "target_table": "orders",
+      "template_hash": "036cb1ede04b97e1c6f74baa1d4fdce5cbfb6cca2ad7c64a8018d1c4f608a636",
+      "template_id": "T1",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from orders where customer_id = ?",
+      "case_id": "CASE-T1-02",
+      "is_verified": true,
+      "memory_id": 2,
+      "partition": "TRAIN",
+      "primary_candidate_key": "orders:btree:customer_id",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM orders WHERE customer_id = 105;",
+      "target_table": "orders",
+      "template_hash": "036cb1ede04b97e1c6f74baa1d4fdce5cbfb6cca2ad7c64a8018d1c4f608a636",
+      "template_id": "T1",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from orders where customer_id = ?",
+      "case_id": "CASE-T1-03",
+      "is_verified": true,
+      "memory_id": 3,
+      "partition": "TRAIN",
+      "primary_candidate_key": "orders:btree:customer_id",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM orders WHERE customer_id = 278;",
+      "target_table": "orders",
+      "template_hash": "036cb1ede04b97e1c6f74baa1d4fdce5cbfb6cca2ad7c64a8018d1c4f608a636",
+      "template_id": "T1",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from orders where total_amount > ?",
+      "case_id": "CASE-T2-01",
+      "is_verified": true,
+      "memory_id": 4,
+      "partition": "TRAIN",
+      "primary_candidate_key": "orders:btree:total_amount",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM orders WHERE total_amount > 450.00;",
+      "target_table": "orders",
+      "template_hash": "f5bbbbeea30650c2c997aeadc2230f1b37fe979559019aba0304bf15730e563c",
+      "template_id": "T2",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from orders where total_amount > ?",
+      "case_id": "CASE-T2-02",
+      "is_verified": true,
+      "memory_id": 5,
+      "partition": "TRAIN",
+      "primary_candidate_key": "orders:btree:total_amount",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM orders WHERE total_amount > 480.00;",
+      "target_table": "orders",
+      "template_hash": "f5bbbbeea30650c2c997aeadc2230f1b37fe979559019aba0304bf15730e563c",
+      "template_id": "T2",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from orders where total_amount > ?",
+      "case_id": "CASE-T2-03",
+      "is_verified": true,
+      "memory_id": 6,
+      "partition": "TRAIN",
+      "primary_candidate_key": "orders:btree:total_amount",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM orders WHERE total_amount > 420.00;",
+      "target_table": "orders",
+      "template_hash": "f5bbbbeea30650c2c997aeadc2230f1b37fe979559019aba0304bf15730e563c",
+      "template_id": "T2",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from orders where customer_id = ? and total_amount > ?",
+      "case_id": "CASE-T3-03",
+      "is_verified": true,
+      "memory_id": 7,
+      "partition": "DEV",
+      "primary_candidate_key": "orders:btree:total_amount,customer_id",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM orders WHERE customer_id = 278 AND total_amount > 200.00;",
+      "target_table": "orders",
+      "template_hash": "30a0565175c281388d71d94a46e18432d582b204efaa478e88d86c3166ce39b2",
+      "template_id": "T3",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from order_items where quantity > ?",
+      "case_id": "CASE-T5-01",
+      "is_verified": true,
+      "memory_id": 8,
+      "partition": "DEV",
+      "primary_candidate_key": "order_items:btree:quantity",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM order_items WHERE quantity > 8;",
+      "target_table": "order_items",
+      "template_hash": "6bcb778b583d7913410164211ea7137d5bd13ddf49daa252854435e899666b58",
+      "template_id": "T5",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from order_items where quantity > ?",
+      "case_id": "CASE-T5-02",
+      "is_verified": true,
+      "memory_id": 9,
+      "partition": "DEV",
+      "primary_candidate_key": "order_items:btree:quantity",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM order_items WHERE quantity > 9;",
+      "target_table": "order_items",
+      "template_hash": "6bcb778b583d7913410164211ea7137d5bd13ddf49daa252854435e899666b58",
+      "template_id": "T5",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from order_items where quantity > ? and unit_price > ?",
+      "case_id": "CASE-T7-01",
+      "is_verified": true,
+      "memory_id": 10,
+      "partition": "TEST",
+      "primary_candidate_key": "order_items:btree:quantity,unit_price",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM order_items WHERE quantity > 7 AND unit_price > 80.00;",
+      "target_table": "order_items",
+      "template_hash": "03fe9bcb608dbc9323c5744caf0518171dd12a199fc66d8af319daf545ae6b64",
+      "template_id": "T7",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from order_items where quantity > ? and unit_price > ?",
+      "case_id": "CASE-T7-02",
+      "is_verified": true,
+      "memory_id": 11,
+      "partition": "TEST",
+      "primary_candidate_key": "order_items:btree:quantity,unit_price",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM order_items WHERE quantity > 8 AND unit_price > 85.00;",
+      "target_table": "order_items",
+      "template_hash": "03fe9bcb608dbc9323c5744caf0518171dd12a199fc66d8af319daf545ae6b64",
+      "template_id": "T7",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from order_items where quantity > ? and unit_price > ?",
+      "case_id": "CASE-T7-03",
+      "is_verified": true,
+      "memory_id": 12,
+      "partition": "TEST",
+      "primary_candidate_key": "order_items:btree:quantity,unit_price",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM order_items WHERE quantity > 6 AND unit_price > 90.00;",
+      "target_table": "order_items",
+      "template_hash": "03fe9bcb608dbc9323c5744caf0518171dd12a199fc66d8af319daf545ae6b64",
+      "template_id": "T7",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from orders where customer_id = ? and status = ?",
+      "case_id": "CASE-T8-01",
+      "is_verified": true,
+      "memory_id": 13,
+      "partition": "TEST",
+      "primary_candidate_key": "orders:btree:customer_id",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM orders WHERE customer_id = 42 AND status = 'COMPLETED';",
+      "target_table": "orders",
+      "template_hash": "3c098f93b8db0d86bd20843c7d4361b26048ab6e3484d8a878418d05e2e0556c",
+      "template_id": "T8",
+      "verification_state": "verified_measured"
+    },
+    {
+      "canonical_template": "select * from orders where customer_id = ? and status = ?",
+      "case_id": "CASE-T8-02",
+      "is_verified": true,
+      "memory_id": 14,
+      "partition": "TEST",
+      "primary_candidate_key": "orders:btree:customer_id",
+      "provenance": "measured",
+      "query_text": "SELECT * FROM orders WHERE customer_id = 105 AND status = 'SHIPPED';",
+      "target_table": "orders",
+      "template_hash": "3c098f93b8db0d86bd20843c7d4361b26048ab6e3484d8a878418d05e2e0556c",
+      "template_id": "T8",
+      "verification_state": "verified_measured"
+    }
+  ],
+  "created_at": "2026-10-01T22:30:00Z",
+  "manifest_version": "1.0.0",
+  "partitions": {
+    "DEV": {
+      "case_count": 3,
+      "case_ids": [
+        "CASE-T3-03",
+        "CASE-T5-01",
+        "CASE-T5-02"
+      ],
+      "memory_ids": [
+        7,
+        8,
+        9
+      ],
+      "templates": [
+        "T3",
+        "T5"
+      ]
+    },
+    "TEST": {
+      "case_count": 5,
+      "case_ids": [
+        "CASE-T7-01",
+        "CASE-T7-02",
+        "CASE-T7-03",
+        "CASE-T8-01",
+        "CASE-T8-02"
+      ],
+      "memory_ids": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "templates": [
+        "T7",
+        "T8"
+      ]
+    },
+    "TRAIN": {
+      "case_count": 6,
+      "case_ids": [
+        "CASE-T1-01",
+        "CASE-T1-02",
+        "CASE-T1-03",
+        "CASE-T2-01",
+        "CASE-T2-02",
+        "CASE-T2-03"
+      ],
+      "memory_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "templates": [
+        "T1",
+        "T2"
+      ]
+    }
+  },
+  "total_cases": 14
+}

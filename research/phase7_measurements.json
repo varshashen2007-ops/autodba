@@ -1,0 +1,208 @@
+[
+  {
+    "case_id": "CASE-TP-A-01",
+    "template_id": "TP-A",
+    "query_text": "SELECT * FROM orders WHERE total_amount > 455.00 AND status = 'pending'",
+    "target_table": "orders",
+    "candidate_count": 1,
+    "candidate_benchmarks": [
+      {
+        "index_name": "idx_autodba_p7_orders_total_amount",
+        "target_table": "orders",
+        "target_columns": [
+          "total_amount"
+        ],
+        "t_before_ms": 1.9754,
+        "t_after_ms": 1.0021,
+        "cov_before": 0.3684,
+        "cov_after": 0.2214,
+        "runtime_improvement_percent": 49.27,
+        "scan_type_before": "Seq Scan",
+        "scan_type_after": "Bitmap Heap Scan",
+        "shared_hit_blocks_before": 45,
+        "shared_hit_blocks_after": 47,
+        "cleanup_success": true,
+        "candidate_id": "cand_orders_total_amount",
+        "canonical_key": "orders:btree:total_amount",
+        "is_baseline": true,
+        "hypopg_cost_improvement": 55.02
+      }
+    ],
+    "oracle": {
+      "candidate_id": "cand_orders_total_amount",
+      "canonical_key": "orders:btree:total_amount",
+      "columns": [
+        "total_amount"
+      ],
+      "runtime_improvement_percent": 49.27,
+      "t_after_ms": 1.0021
+    },
+    "skipped": false
+  },
+  {
+    "case_id": "CASE-TP-A-02",
+    "template_id": "TP-A",
+    "query_text": "SELECT * FROM orders WHERE total_amount > 460.00 AND status = 'shipped'",
+    "target_table": "orders",
+    "candidate_count": 1,
+    "candidate_benchmarks": [
+      {
+        "index_name": "idx_autodba_p7_orders_total_amount",
+        "target_table": "orders",
+        "target_columns": [
+          "total_amount"
+        ],
+        "t_before_ms": 0.9818,
+        "t_after_ms": 0.8605,
+        "cov_before": 0.1715,
+        "cov_after": 0.5134,
+        "runtime_improvement_percent": 12.36,
+        "scan_type_before": "Seq Scan",
+        "scan_type_after": "Bitmap Heap Scan",
+        "shared_hit_blocks_before": 45,
+        "shared_hit_blocks_after": 47,
+        "cleanup_success": true,
+        "candidate_id": "cand_orders_total_amount",
+        "canonical_key": "orders:btree:total_amount",
+        "is_baseline": true,
+        "hypopg_cost_improvement": 56.12
+      }
+    ],
+    "oracle": {
+      "candidate_id": "cand_orders_total_amount",
+      "canonical_key": "orders:btree:total_amount",
+      "columns": [
+        "total_amount"
+      ],
+      "runtime_improvement_percent": 12.36,
+      "t_after_ms": 0.8605
+    },
+    "skipped": false
+  },
+  {
+    "case_id": "CASE-TP-A-03",
+    "template_id": "TP-A",
+    "query_text": "SELECT * FROM orders WHERE total_amount > 443.00 AND status = 'completed'",
+    "target_table": "orders",
+    "candidate_count": 1,
+    "candidate_benchmarks": [
+      {
+        "index_name": "idx_autodba_p7_orders_total_amount",
+        "target_table": "orders",
+        "target_columns": [
+          "total_amount"
+        ],
+        "t_before_ms": 1.4424,
+        "t_after_ms": 0.8056,
+        "cov_before": 0.2578,
+        "cov_after": 0.2404,
+        "runtime_improvement_percent": 44.15,
+        "scan_type_before": "Seq Scan",
+        "scan_type_after": "Bitmap Heap Scan",
+        "shared_hit_blocks_before": 45,
+        "shared_hit_blocks_after": 48,
+        "cleanup_success": true,
+        "candidate_id": "cand_orders_total_amount",
+        "canonical_key": "orders:btree:total_amount",
+        "is_baseline": true,
+        "hypopg_cost_improvement": 49.21
+      }
+    ],
+    "oracle": {
+      "candidate_id": "cand_orders_total_amount",
+      "canonical_key": "orders:btree:total_amount",
+      "columns": [
+        "total_amount"
+      ],
+      "runtime_improvement_percent": 44.15,
+      "t_after_ms": 0.8056
+    },
+    "skipped": false
+  },
+  {
+    "case_id": "CASE-TP-D-01",
+    "template_id": "TP-D",
+    "query_text": "SELECT * FROM orders WHERE status = 'cancelled' AND total_amount > 455.00",
+    "target_table": "orders",
+    "candidate_count": 1,
+    "candidate_benchmarks": [
+      {
+        "index_name": "idx_autodba_p7_orders_total_amount",
+        "target_table": "orders",
+        "target_columns": [
+          "total_amount"
+        ],
+        "t_before_ms": 1.2737,
+        "t_after_ms": 0.9513,
+        "cov_before": 0.2497,
+        "cov_after": 0.4149,
+        "runtime_improvement_percent": 25.31,
+        "scan_type_before": "Seq Scan",
+        "scan_type_after": "Bitmap Heap Scan",
+        "shared_hit_blocks_before": 45,
+        "shared_hit_blocks_after": 47,
+        "cleanup_success": true,
+        "candidate_id": "cand_orders_total_amount",
+        "canonical_key": "orders:btree:total_amount",
+        "is_baseline": true,
+        "hypopg_cost_improvement": 55.02
+      }
+    ],
+    "oracle": {
+      "candidate_id": "cand_orders_total_amount",
+      "canonical_key": "orders:btree:total_amount",
+      "columns": [
+        "total_amount"
+      ],
+      "runtime_improvement_percent": 25.31,
+      "t_after_ms": 0.9513
+    },
+    "skipped": false
+  },
+  {
+    "case_id": "CASE-TP-D-02",
+    "template_id": "TP-D",
+    "query_text": "SELECT * FROM orders WHERE status = 'processing' AND total_amount > 445.00",
+    "target_table": "orders",
+    "candidate_count": 1,
+    "candidate_benchmarks": [
+      {
+        "index_name": "idx_autodba_p7_orders_total_amount",
+        "target_table": "orders",
+        "target_columns": [
+          "total_amount"
+        ],
+        "t_before_ms": 1.2681,
+        "t_after_ms": 0.6799,
+        "cov_before": 0.2845,
+        "cov_after": 0.2106,
+        "runtime_improvement_percent": 46.39,
+        "scan_type_before": "Seq Scan",
+        "scan_type_after": "Bitmap Heap Scan",
+        "shared_hit_blocks_before": 45,
+        "shared_hit_blocks_after": 48,
+        "cleanup_success": true,
+        "candidate_id": "cand_orders_total_amount",
+        "canonical_key": "orders:btree:total_amount",
+        "is_baseline": true,
+        "hypopg_cost_improvement": 49.66
+      }
+    ],
+    "oracle": {
+      "candidate_id": "cand_orders_total_amount",
+      "canonical_key": "orders:btree:total_amount",
+      "columns": [
+        "total_amount"
+      ],
+      "runtime_improvement_percent": 46.39,
+      "t_after_ms": 0.6799
+    },
+    "skipped": false
+  },
+  {
+    "case_id": "CASE-TP-B-01",
+    "skipped": true,
+    "reason": "preflight_failed",
+    "oracle": null
+  }
+]

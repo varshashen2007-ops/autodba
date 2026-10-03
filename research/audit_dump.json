@@ -1,0 +1,829 @@
+{
+  "total_db_records": 14,
+  "cases": [
+    {
+      "id": 1,
+      "query_text": "SELECT * FROM orders WHERE customer_id = 42;",
+      "canonical_sql": "select * from orders where customer_id = ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "orders",
+        "btree",
+        [
+          "customer_id"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.2858,
+      "cov_before": 0.2433,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 45,
+      "read_before": 0,
+      "rows_before": 10,
+      "t_after": 0.0329,
+      "cov_after": 0.2308,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Bitmap Heap Scan",
+      "hit_after": 14,
+      "read_after": 0,
+      "rows_after": 10,
+      "runtime_improvement_percent": 88.49,
+      "planner_cost_improvement_percent": 73.57,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 2,
+      "query_text": "SELECT * FROM orders WHERE customer_id = 105;",
+      "canonical_sql": "select * from orders where customer_id = ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "orders",
+        "btree",
+        [
+          "customer_id"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.1648,
+      "cov_before": 0.288,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 45,
+      "read_before": 0,
+      "rows_before": 10,
+      "t_after": 0.0324,
+      "cov_after": 0.2422,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Bitmap Heap Scan",
+      "hit_after": 14,
+      "read_after": 0,
+      "rows_after": 10,
+      "runtime_improvement_percent": 80.34,
+      "planner_cost_improvement_percent": 73.57,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 3,
+      "query_text": "SELECT * FROM orders WHERE customer_id = 278;",
+      "canonical_sql": "select * from orders where customer_id = ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "orders",
+        "btree",
+        [
+          "customer_id"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.1487,
+      "cov_before": 0.0397,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 45,
+      "read_before": 0,
+      "rows_before": 10,
+      "t_after": 0.0273,
+      "cov_after": 0.4918,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Bitmap Heap Scan",
+      "hit_after": 14,
+      "read_after": 0,
+      "rows_after": 10,
+      "runtime_improvement_percent": 81.64,
+      "planner_cost_improvement_percent": 73.57,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 4,
+      "query_text": "SELECT * FROM orders WHERE total_amount > 450.00;",
+      "canonical_sql": "select * from orders where total_amount > ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "orders",
+        "btree",
+        [
+          "total_amount"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.3463,
+      "cov_before": 0.0701,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 45,
+      "read_before": 0,
+      "rows_before": 277,
+      "t_after": 0.0957,
+      "cov_after": 0.2328,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Bitmap Heap Scan",
+      "hit_after": 51,
+      "read_after": 0,
+      "rows_after": 277,
+      "runtime_improvement_percent": 72.37,
+      "planner_cost_improvement_percent": 48.9,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 5,
+      "query_text": "SELECT * FROM orders WHERE total_amount > 480.00;",
+      "canonical_sql": "select * from orders where total_amount > ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "orders",
+        "btree",
+        [
+          "total_amount"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.3014,
+      "cov_before": 0.133,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 45,
+      "read_before": 0,
+      "rows_before": 0,
+      "t_after": 0.0096,
+      "cov_after": 0.2608,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Index Scan",
+      "hit_after": 2,
+      "read_after": 0,
+      "rows_after": 0,
+      "runtime_improvement_percent": 96.81,
+      "planner_cost_improvement_percent": 92.28,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 6,
+      "query_text": "SELECT * FROM orders WHERE total_amount > 420.00;",
+      "canonical_sql": "select * from orders where total_amount > ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "orders",
+        "btree",
+        [
+          "total_amount"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.3238,
+      "cov_before": 0.0362,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 45,
+      "read_before": 0,
+      "rows_before": 609,
+      "t_after": 0.114,
+      "cov_after": 0.2315,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Bitmap Heap Scan",
+      "hit_after": 53,
+      "read_after": 0,
+      "rows_after": 609,
+      "runtime_improvement_percent": 64.79,
+      "planner_cost_improvement_percent": 39.02,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 7,
+      "query_text": "SELECT * FROM orders WHERE customer_id = 278 AND total_amount > 200.00;",
+      "canonical_sql": "select * from orders where customer_id = ? and total_amount > ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "orders",
+        "btree",
+        [
+          "total_amount",
+          "customer_id"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.3175,
+      "cov_before": 0.0667,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 45,
+      "read_before": 0,
+      "rows_before": 7,
+      "t_after": 0.1163,
+      "cov_after": 0.1836,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Bitmap Heap Scan",
+      "hit_after": 35,
+      "read_after": 0,
+      "rows_after": 7,
+      "runtime_improvement_percent": 63.37,
+      "planner_cost_improvement_percent": 13.08,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 8,
+      "query_text": "SELECT * FROM order_items WHERE quantity > 8;",
+      "canonical_sql": "select * from order_items where quantity > ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "order_items",
+        "btree",
+        [
+          "quantity"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.4732,
+      "cov_before": 0.0587,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 125,
+      "read_before": 0,
+      "rows_before": 0,
+      "t_after": 0.0139,
+      "cov_after": 0.2701,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Index Scan",
+      "hit_after": 2,
+      "read_after": 0,
+      "rows_after": 0,
+      "runtime_improvement_percent": 97.06,
+      "planner_cost_improvement_percent": 97.4,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 9,
+      "query_text": "SELECT * FROM order_items WHERE quantity > 9;",
+      "canonical_sql": "select * from order_items where quantity > ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "order_items",
+        "btree",
+        [
+          "quantity"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.616,
+      "cov_before": 0.3113,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 125,
+      "read_before": 0,
+      "rows_before": 0,
+      "t_after": 0.0308,
+      "cov_after": 0.331,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Index Scan",
+      "hit_after": 2,
+      "read_after": 0,
+      "rows_after": 0,
+      "runtime_improvement_percent": 95.0,
+      "planner_cost_improvement_percent": 97.4,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 10,
+      "query_text": "SELECT * FROM order_items WHERE quantity > 7 AND unit_price > 80.00;",
+      "canonical_sql": "select * from order_items where quantity > ? and unit_price > ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "order_items",
+        "btree",
+        [
+          "quantity",
+          "unit_price"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.6742,
+      "cov_before": 0.0471,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 125,
+      "read_before": 0,
+      "rows_before": 0,
+      "t_after": 0.0247,
+      "cov_after": 0.614,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Index Scan",
+      "hit_after": 2,
+      "read_after": 0,
+      "rows_after": 0,
+      "runtime_improvement_percent": 96.34,
+      "planner_cost_improvement_percent": 97.65,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 11,
+      "query_text": "SELECT * FROM order_items WHERE quantity > 8 AND unit_price > 85.00;",
+      "canonical_sql": "select * from order_items where quantity > ? and unit_price > ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "order_items",
+        "btree",
+        [
+          "quantity",
+          "unit_price"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.9013,
+      "cov_before": 0.2467,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 125,
+      "read_before": 0,
+      "rows_before": 0,
+      "t_after": 0.0194,
+      "cov_after": 0.2176,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Index Scan",
+      "hit_after": 2,
+      "read_after": 0,
+      "rows_after": 0,
+      "runtime_improvement_percent": 97.85,
+      "planner_cost_improvement_percent": 97.65,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 12,
+      "query_text": "SELECT * FROM order_items WHERE quantity > 6 AND unit_price > 90.00;",
+      "canonical_sql": "select * from order_items where quantity > ? and unit_price > ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "order_items",
+        "btree",
+        [
+          "quantity",
+          "unit_price"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.7651,
+      "cov_before": 0.1698,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 125,
+      "read_before": 0,
+      "rows_before": 0,
+      "t_after": 0.031,
+      "cov_after": 0.2404,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Index Scan",
+      "hit_after": 2,
+      "read_after": 0,
+      "rows_after": 0,
+      "runtime_improvement_percent": 95.95,
+      "planner_cost_improvement_percent": 97.65,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 13,
+      "query_text": "SELECT * FROM orders WHERE customer_id = 42 AND status = 'COMPLETED';",
+      "canonical_sql": "select * from orders where customer_id = ? and status = ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "orders",
+        "btree",
+        [
+          "customer_id"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.312,
+      "cov_before": 0.2001,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 45,
+      "read_before": 0,
+      "rows_before": 0,
+      "t_after": 0.0406,
+      "cov_after": 0.2607,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Bitmap Heap Scan",
+      "hit_after": 14,
+      "read_after": 0,
+      "rows_after": 0,
+      "runtime_improvement_percent": 86.99,
+      "planner_cost_improvement_percent": 76.31,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    },
+    {
+      "id": 14,
+      "query_text": "SELECT * FROM orders WHERE customer_id = 105 AND status = 'SHIPPED';",
+      "canonical_sql": "select * from orders where customer_id = ? and status = ?",
+      "provenance": "measured",
+      "is_verified": true,
+      "verification_state": "verified_measured",
+      "outcome": "success",
+      "candidate_key": [
+        "orders",
+        "btree",
+        [
+          "customer_id"
+        ]
+      ],
+      "index_name": null,
+      "t_before": 0.2961,
+      "cov_before": 0.2315,
+      "runs_before": 10,
+      "warmup_before": 2,
+      "scan_before": "Seq Scan",
+      "hit_before": 45,
+      "read_before": 0,
+      "rows_before": 0,
+      "t_after": 0.0713,
+      "cov_after": 0.2877,
+      "runs_after": 10,
+      "warmup_after": 2,
+      "scan_after": "Bitmap Heap Scan",
+      "hit_after": 14,
+      "read_after": 0,
+      "rows_after": 0,
+      "runtime_improvement_percent": 75.92,
+      "planner_cost_improvement_percent": 76.31,
+      "diagnosis_present": true,
+      "recommendation_present": true,
+      "validation_present": true,
+      "benchmark_present": true
+    }
+  ],
+  "templates": {
+    "select * from orders where customer_id = ?": [
+      1,
+      2,
+      3
+    ],
+    "select * from orders where total_amount > ?": [
+      4,
+      5,
+      6
+    ],
+    "select * from orders where customer_id = ? and total_amount > ?": [
+      7
+    ],
+    "select * from order_items where quantity > ?": [
+      8,
+      9
+    ],
+    "select * from order_items where quantity > ? and unit_price > ?": [
+      10,
+      11,
+      12
+    ],
+    "select * from orders where customer_id = ? and status = ?": [
+      13,
+      14
+    ]
+  },
+  "train_keys": {
+    "orders:btree:customer_id": [
+      1,
+      2,
+      3
+    ],
+    "orders:btree:total_amount": [
+      4,
+      5,
+      6
+    ],
+    "orders:btree:total_amount,customer_id": [
+      7
+    ],
+    "order_items:btree:quantity": [
+      8,
+      9
+    ]
+  },
+  "test_support": [
+    {
+      "test_memory_id": 10,
+      "query_text": "SELECT * FROM order_items WHERE quantity > 7 AND unit_price > 80.00;",
+      "canonical_sql": "select * from order_items where quantity > ? and unit_price > ?",
+      "candidate_count": 3,
+      "candidates": [
+        {
+          "candidate_id": "cand_order_items_quantity_unit_price",
+          "is_baseline": true,
+          "key": [
+            "order_items",
+            "btree",
+            [
+              "quantity",
+              "unit_price"
+            ]
+          ],
+          "hypopg_verdict": "validated",
+          "hypopg_cost_delta": 97.72,
+          "safety_eligible": true,
+          "matching_train_memory_ids": []
+        },
+        {
+          "candidate_id": "cand_order_items_quantity",
+          "is_baseline": false,
+          "key": [
+            "order_items",
+            "btree",
+            [
+              "quantity"
+            ]
+          ],
+          "hypopg_verdict": "validated",
+          "hypopg_cost_delta": 97.74,
+          "safety_eligible": true,
+          "matching_train_memory_ids": [
+            8,
+            9
+          ]
+        },
+        {
+          "candidate_id": "cand_order_items_unit_price",
+          "is_baseline": false,
+          "key": [
+            "order_items",
+            "btree",
+            [
+              "unit_price"
+            ]
+          ],
+          "hypopg_verdict": "no_improvement",
+          "hypopg_cost_delta": 0.0,
+          "safety_eligible": false,
+          "matching_train_memory_ids": []
+        }
+      ]
+    },
+    {
+      "test_memory_id": 11,
+      "query_text": "SELECT * FROM order_items WHERE quantity > 8 AND unit_price > 85.00;",
+      "canonical_sql": "select * from order_items where quantity > ? and unit_price > ?",
+      "candidate_count": 3,
+      "candidates": [
+        {
+          "candidate_id": "cand_order_items_quantity_unit_price",
+          "is_baseline": true,
+          "key": [
+            "order_items",
+            "btree",
+            [
+              "quantity",
+              "unit_price"
+            ]
+          ],
+          "hypopg_verdict": "validated",
+          "hypopg_cost_delta": 97.72,
+          "safety_eligible": true,
+          "matching_train_memory_ids": []
+        },
+        {
+          "candidate_id": "cand_order_items_quantity",
+          "is_baseline": false,
+          "key": [
+            "order_items",
+            "btree",
+            [
+              "quantity"
+            ]
+          ],
+          "hypopg_verdict": "validated",
+          "hypopg_cost_delta": 97.74,
+          "safety_eligible": true,
+          "matching_train_memory_ids": [
+            8,
+            9
+          ]
+        },
+        {
+          "candidate_id": "cand_order_items_unit_price",
+          "is_baseline": false,
+          "key": [
+            "order_items",
+            "btree",
+            [
+              "unit_price"
+            ]
+          ],
+          "hypopg_verdict": "no_improvement",
+          "hypopg_cost_delta": 0.0,
+          "safety_eligible": false,
+          "matching_train_memory_ids": []
+        }
+      ]
+    },
+    {
+      "test_memory_id": 12,
+      "query_text": "SELECT * FROM order_items WHERE quantity > 6 AND unit_price > 90.00;",
+      "canonical_sql": "select * from order_items where quantity > ? and unit_price > ?",
+      "candidate_count": 3,
+      "candidates": [
+        {
+          "candidate_id": "cand_order_items_quantity_unit_price",
+          "is_baseline": true,
+          "key": [
+            "order_items",
+            "btree",
+            [
+              "quantity",
+              "unit_price"
+            ]
+          ],
+          "hypopg_verdict": "validated",
+          "hypopg_cost_delta": 97.72,
+          "safety_eligible": true,
+          "matching_train_memory_ids": []
+        },
+        {
+          "candidate_id": "cand_order_items_quantity",
+          "is_baseline": false,
+          "key": [
+            "order_items",
+            "btree",
+            [
+              "quantity"
+            ]
+          ],
+          "hypopg_verdict": "validated",
+          "hypopg_cost_delta": 97.74,
+          "safety_eligible": true,
+          "matching_train_memory_ids": [
+            8,
+            9
+          ]
+        },
+        {
+          "candidate_id": "cand_order_items_unit_price",
+          "is_baseline": false,
+          "key": [
+            "order_items",
+            "btree",
+            [
+              "unit_price"
+            ]
+          ],
+          "hypopg_verdict": "no_improvement",
+          "hypopg_cost_delta": 0.0,
+          "safety_eligible": false,
+          "matching_train_memory_ids": []
+        }
+      ]
+    },
+    {
+      "test_memory_id": 13,
+      "query_text": "SELECT * FROM orders WHERE customer_id = 42 AND status = 'COMPLETED';",
+      "canonical_sql": "select * from orders where customer_id = ? and status = ?",
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "candidate_id": "cand_orders_customer_id",
+          "is_baseline": true,
+          "key": [
+            "orders",
+            "btree",
+            [
+              "customer_id"
+            ]
+          ],
+          "hypopg_verdict": "validated",
+          "hypopg_cost_delta": 76.52,
+          "safety_eligible": true,
+          "matching_train_memory_ids": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "test_memory_id": 14,
+      "query_text": "SELECT * FROM orders WHERE customer_id = 105 AND status = 'SHIPPED';",
+      "canonical_sql": "select * from orders where customer_id = ? and status = ?",
+      "candidate_count": 1,
+      "candidates": [
+        {
+          "candidate_id": "cand_orders_customer_id",
+          "is_baseline": true,
+          "key": [
+            "orders",
+            "btree",
+            [
+              "customer_id"
+            ]
+          ],
+          "hypopg_verdict": "validated",
+          "hypopg_cost_delta": 76.52,
+          "safety_eligible": true,
+          "matching_train_memory_ids": [
+            1,
+            2,
+            3
+          ]
+        }
+      ]
+    }
+  ]
+}

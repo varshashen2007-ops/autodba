@@ -4,6 +4,7 @@ from typing import List, Optional
 
 from sqlalchemy import (
     BigInteger,
+    Boolean,
     DateTime,
     ForeignKey,
     Integer,
@@ -266,6 +267,27 @@ class OptimizationMemoryModel(Base):
     outcome_summary: Mapped[Optional[str]] = mapped_column(
         String,
         nullable=True,
+    )
+
+    provenance: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+        default="unverified",
+        server_default="unverified",
+    )
+
+    is_verified: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+        server_default="false",
+    )
+
+    verification_state: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+        default="unverified",
+        server_default="unverified",
     )
 
     embedding: Mapped[list] = mapped_column(

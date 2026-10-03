@@ -1,0 +1,372 @@
+[
+  {
+    "case_id": "CASE-TP-A-01",
+    "template_id": "TP-A",
+    "sql": "SELECT * FROM orders WHERE total_amount > 455.00 AND status = 'pending'",
+    "target_table": "orders",
+    "eligible_count": 1,
+    "eligible_candidates": [
+      "orders:btree:total_amount"
+    ],
+    "selections": {
+      "policy_a": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 55.02,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_b": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 55.02,
+            "similarity_support": 1.964,
+            "outcome_support": 0.0,
+            "composite_score": 56.984,
+            "matching_history_count": 3,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_c": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 55.02,
+            "similarity_support": 0.0,
+            "outcome_support": 1.5317,
+            "composite_score": 56.5517,
+            "matching_history_count": 3,
+            "eligible_measured_count": 3
+          }
+        ]
+      }
+    },
+    "a_b_agree": true,
+    "a_c_agree": true,
+    "b_c_agree": true,
+    "skipped": false
+  },
+  {
+    "case_id": "CASE-TP-A-02",
+    "template_id": "TP-A",
+    "sql": "SELECT * FROM orders WHERE total_amount > 460.00 AND status = 'shipped'",
+    "target_table": "orders",
+    "eligible_count": 1,
+    "eligible_candidates": [
+      "orders:btree:total_amount"
+    ],
+    "selections": {
+      "policy_a": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 56.12,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_b": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 56.12,
+            "similarity_support": 2.1514,
+            "outcome_support": 0.0,
+            "composite_score": 58.2714,
+            "matching_history_count": 3,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_c": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 56.12,
+            "similarity_support": 0.0,
+            "outcome_support": 1.6779,
+            "composite_score": 57.7979,
+            "matching_history_count": 3,
+            "eligible_measured_count": 3
+          }
+        ]
+      }
+    },
+    "a_b_agree": true,
+    "a_c_agree": true,
+    "b_c_agree": true,
+    "skipped": false
+  },
+  {
+    "case_id": "CASE-TP-A-03",
+    "template_id": "TP-A",
+    "sql": "SELECT * FROM orders WHERE total_amount > 443.00 AND status = 'completed'",
+    "target_table": "orders",
+    "eligible_count": 1,
+    "eligible_candidates": [
+      "orders:btree:total_amount"
+    ],
+    "selections": {
+      "policy_a": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 49.21,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_b": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 49.21,
+            "similarity_support": 2.1514,
+            "outcome_support": 0.0,
+            "composite_score": 51.3614,
+            "matching_history_count": 3,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_c": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 49.21,
+            "similarity_support": 0.0,
+            "outcome_support": 1.6779,
+            "composite_score": 50.8879,
+            "matching_history_count": 3,
+            "eligible_measured_count": 3
+          }
+        ]
+      }
+    },
+    "a_b_agree": true,
+    "a_c_agree": true,
+    "b_c_agree": true,
+    "skipped": false
+  },
+  {
+    "case_id": "CASE-TP-D-01",
+    "template_id": "TP-D",
+    "sql": "SELECT * FROM orders WHERE status = 'cancelled' AND total_amount > 455.00",
+    "target_table": "orders",
+    "eligible_count": 1,
+    "eligible_candidates": [
+      "orders:btree:total_amount"
+    ],
+    "selections": {
+      "policy_a": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 55.02,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_b": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 55.02,
+            "similarity_support": 1.964,
+            "outcome_support": 0.0,
+            "composite_score": 56.984,
+            "matching_history_count": 3,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_c": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 55.02,
+            "similarity_support": 0.0,
+            "outcome_support": 1.5317,
+            "composite_score": 56.5517,
+            "matching_history_count": 3,
+            "eligible_measured_count": 3
+          }
+        ]
+      }
+    },
+    "a_b_agree": true,
+    "a_c_agree": true,
+    "b_c_agree": true,
+    "skipped": false
+  },
+  {
+    "case_id": "CASE-TP-D-02",
+    "template_id": "TP-D",
+    "sql": "SELECT * FROM orders WHERE status = 'processing' AND total_amount > 445.00",
+    "target_table": "orders",
+    "eligible_count": 1,
+    "eligible_candidates": [
+      "orders:btree:total_amount"
+    ],
+    "selections": {
+      "policy_a": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 49.66,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_b": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 49.66,
+            "similarity_support": 1.964,
+            "outcome_support": 0.0,
+            "composite_score": 51.624,
+            "matching_history_count": 3,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_c": {
+        "selected_candidate_id": "cand_orders_total_amount",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "historical_support_count": 0,
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_total_amount",
+            "canonical_key": "orders:btree:total_amount",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 49.66,
+            "similarity_support": 0.0,
+            "outcome_support": 1.5317,
+            "composite_score": 51.1917,
+            "matching_history_count": 3,
+            "eligible_measured_count": 3
+          }
+        ]
+      }
+    },
+    "a_b_agree": true,
+    "a_c_agree": true,
+    "b_c_agree": true,
+    "skipped": false
+  },
+  {
+    "case_id": "CASE-TP-B-01",
+    "skipped": true,
+    "reason": "preflight_failed"
+  }
+]

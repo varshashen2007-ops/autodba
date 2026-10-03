@@ -1,0 +1,501 @@
+[
+  {
+    "case_id": "CASE-T7-01",
+    "template_id": "T7",
+    "query_text": "SELECT * FROM order_items WHERE quantity > 7 AND unit_price > 80.00;",
+    "target_table": "order_items",
+    "eligible_candidates_evaluated": 2,
+    "candidate_benchmarks": [
+      {
+        "candidate_id": "cand_order_items_quantity_unit_price",
+        "columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "is_baseline": true,
+        "canonical_key": "order_items:btree:quantity,unit_price",
+        "hypopg_cost_improvement": 97.72,
+        "benchmark": {
+          "index_name": "idx_autodba_exp_order_items_quantity_unit_price",
+          "target_table": "order_items",
+          "target_columns": [
+            "quantity",
+            "unit_price"
+          ],
+          "t_before_ms": 1.7686,
+          "t_after_ms": 0.6457,
+          "cov_before": 0.3993,
+          "cov_after": 0.4967,
+          "runtime_improvement_percent": 63.49,
+          "scan_type_before": "Seq Scan",
+          "scan_type_after": "Index Scan",
+          "shared_hit_blocks_before": 125,
+          "shared_hit_blocks_after": 2,
+          "cleanup_success": true
+        }
+      },
+      {
+        "candidate_id": "cand_order_items_quantity",
+        "columns": [
+          "quantity"
+        ],
+        "is_baseline": false,
+        "canonical_key": "order_items:btree:quantity",
+        "hypopg_cost_improvement": 97.74,
+        "benchmark": {
+          "index_name": "idx_autodba_exp_order_items_quantity",
+          "target_table": "order_items",
+          "target_columns": [
+            "quantity"
+          ],
+          "t_before_ms": 1.0988,
+          "t_after_ms": 0.6031,
+          "cov_before": 0.2543,
+          "cov_after": 0.3171,
+          "runtime_improvement_percent": 45.12,
+          "scan_type_before": "Seq Scan",
+          "scan_type_after": "Index Scan",
+          "shared_hit_blocks_before": 125,
+          "shared_hit_blocks_after": 2,
+          "cleanup_success": true
+        }
+      }
+    ],
+    "oracle": {
+      "candidate_id": "cand_order_items_quantity_unit_price",
+      "columns": [
+        "quantity",
+        "unit_price"
+      ],
+      "runtime_improvement_percent": 63.49,
+      "t_after_ms": 0.6457
+    },
+    "policy_evaluations": {
+      "policy_a": {
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "selected_columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "t_after_ms": 0.6457,
+        "runtime_improvement_percent": 63.49,
+        "oracle_improvement_percent": 63.49,
+        "selection_regret_percent": 0.0,
+        "is_oracle": true,
+        "fallback_used": false
+      },
+      "policy_b": {
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "selected_columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "t_after_ms": 0.6457,
+        "runtime_improvement_percent": 63.49,
+        "oracle_improvement_percent": 63.49,
+        "selection_regret_percent": 0.0,
+        "is_oracle": true,
+        "fallback_used": true
+      },
+      "policy_c": {
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "selected_columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "t_after_ms": 0.6457,
+        "runtime_improvement_percent": 63.49,
+        "oracle_improvement_percent": 63.49,
+        "selection_regret_percent": 0.0,
+        "is_oracle": true,
+        "fallback_used": true
+      }
+    }
+  },
+  {
+    "case_id": "CASE-T7-02",
+    "template_id": "T7",
+    "query_text": "SELECT * FROM order_items WHERE quantity > 8 AND unit_price > 85.00;",
+    "target_table": "order_items",
+    "eligible_candidates_evaluated": 2,
+    "candidate_benchmarks": [
+      {
+        "candidate_id": "cand_order_items_quantity_unit_price",
+        "columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "is_baseline": true,
+        "canonical_key": "order_items:btree:quantity,unit_price",
+        "hypopg_cost_improvement": 97.72,
+        "benchmark": {
+          "index_name": "idx_autodba_exp_order_items_quantity_unit_price",
+          "target_table": "order_items",
+          "target_columns": [
+            "quantity",
+            "unit_price"
+          ],
+          "t_before_ms": 1.1589,
+          "t_after_ms": 0.6141,
+          "cov_before": 0.2463,
+          "cov_after": 0.2474,
+          "runtime_improvement_percent": 47.01,
+          "scan_type_before": "Seq Scan",
+          "scan_type_after": "Index Scan",
+          "shared_hit_blocks_before": 125,
+          "shared_hit_blocks_after": 2,
+          "cleanup_success": true
+        }
+      },
+      {
+        "candidate_id": "cand_order_items_quantity",
+        "columns": [
+          "quantity"
+        ],
+        "is_baseline": false,
+        "canonical_key": "order_items:btree:quantity",
+        "hypopg_cost_improvement": 97.74,
+        "benchmark": {
+          "index_name": "idx_autodba_exp_order_items_quantity",
+          "target_table": "order_items",
+          "target_columns": [
+            "quantity"
+          ],
+          "t_before_ms": 1.0827,
+          "t_after_ms": 0.5317,
+          "cov_before": 0.2124,
+          "cov_after": 0.2991,
+          "runtime_improvement_percent": 50.89,
+          "scan_type_before": "Seq Scan",
+          "scan_type_after": "Index Scan",
+          "shared_hit_blocks_before": 125,
+          "shared_hit_blocks_after": 2,
+          "cleanup_success": true
+        }
+      }
+    ],
+    "oracle": {
+      "candidate_id": "cand_order_items_quantity",
+      "columns": [
+        "quantity"
+      ],
+      "runtime_improvement_percent": 50.89,
+      "t_after_ms": 0.5317
+    },
+    "policy_evaluations": {
+      "policy_a": {
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "selected_columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "t_after_ms": 0.6141,
+        "runtime_improvement_percent": 47.01,
+        "oracle_improvement_percent": 50.89,
+        "selection_regret_percent": 3.88,
+        "is_oracle": false,
+        "fallback_used": false
+      },
+      "policy_b": {
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "selected_columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "t_after_ms": 0.6141,
+        "runtime_improvement_percent": 47.01,
+        "oracle_improvement_percent": 50.89,
+        "selection_regret_percent": 3.88,
+        "is_oracle": false,
+        "fallback_used": true
+      },
+      "policy_c": {
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "selected_columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "t_after_ms": 0.6141,
+        "runtime_improvement_percent": 47.01,
+        "oracle_improvement_percent": 50.89,
+        "selection_regret_percent": 3.88,
+        "is_oracle": false,
+        "fallback_used": true
+      }
+    }
+  },
+  {
+    "case_id": "CASE-T7-03",
+    "template_id": "T7",
+    "query_text": "SELECT * FROM order_items WHERE quantity > 6 AND unit_price > 90.00;",
+    "target_table": "order_items",
+    "eligible_candidates_evaluated": 2,
+    "candidate_benchmarks": [
+      {
+        "candidate_id": "cand_order_items_quantity_unit_price",
+        "columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "is_baseline": true,
+        "canonical_key": "order_items:btree:quantity,unit_price",
+        "hypopg_cost_improvement": 97.72,
+        "benchmark": {
+          "index_name": "idx_autodba_exp_order_items_quantity_unit_price",
+          "target_table": "order_items",
+          "target_columns": [
+            "quantity",
+            "unit_price"
+          ],
+          "t_before_ms": 1.1058,
+          "t_after_ms": 0.484,
+          "cov_before": 0.2122,
+          "cov_after": 0.2122,
+          "runtime_improvement_percent": 56.23,
+          "scan_type_before": "Seq Scan",
+          "scan_type_after": "Index Scan",
+          "shared_hit_blocks_before": 125,
+          "shared_hit_blocks_after": 2,
+          "cleanup_success": true
+        }
+      },
+      {
+        "candidate_id": "cand_order_items_quantity",
+        "columns": [
+          "quantity"
+        ],
+        "is_baseline": false,
+        "canonical_key": "order_items:btree:quantity",
+        "hypopg_cost_improvement": 97.74,
+        "benchmark": {
+          "index_name": "idx_autodba_exp_order_items_quantity",
+          "target_table": "order_items",
+          "target_columns": [
+            "quantity"
+          ],
+          "t_before_ms": 1.0997,
+          "t_after_ms": 0.4546,
+          "cov_before": 0.3065,
+          "cov_after": 0.2048,
+          "runtime_improvement_percent": 58.66,
+          "scan_type_before": "Seq Scan",
+          "scan_type_after": "Index Scan",
+          "shared_hit_blocks_before": 125,
+          "shared_hit_blocks_after": 2,
+          "cleanup_success": true
+        }
+      }
+    ],
+    "oracle": {
+      "candidate_id": "cand_order_items_quantity",
+      "columns": [
+        "quantity"
+      ],
+      "runtime_improvement_percent": 58.66,
+      "t_after_ms": 0.4546
+    },
+    "policy_evaluations": {
+      "policy_a": {
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "selected_columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "t_after_ms": 0.484,
+        "runtime_improvement_percent": 56.23,
+        "oracle_improvement_percent": 58.66,
+        "selection_regret_percent": 2.43,
+        "is_oracle": false,
+        "fallback_used": false
+      },
+      "policy_b": {
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "selected_columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "t_after_ms": 0.484,
+        "runtime_improvement_percent": 56.23,
+        "oracle_improvement_percent": 58.66,
+        "selection_regret_percent": 2.43,
+        "is_oracle": false,
+        "fallback_used": true
+      },
+      "policy_c": {
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "selected_columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "t_after_ms": 0.484,
+        "runtime_improvement_percent": 56.23,
+        "oracle_improvement_percent": 58.66,
+        "selection_regret_percent": 2.43,
+        "is_oracle": false,
+        "fallback_used": true
+      }
+    }
+  },
+  {
+    "case_id": "CASE-T8-01",
+    "template_id": "T8",
+    "query_text": "SELECT * FROM orders WHERE customer_id = 42 AND status = 'COMPLETED';",
+    "target_table": "orders",
+    "eligible_candidates_evaluated": 1,
+    "candidate_benchmarks": [
+      {
+        "candidate_id": "cand_orders_customer_id",
+        "columns": [
+          "customer_id"
+        ],
+        "is_baseline": true,
+        "canonical_key": "orders:btree:customer_id",
+        "hypopg_cost_improvement": 76.52,
+        "benchmark": {
+          "index_name": "idx_autodba_exp_orders_customer_id",
+          "target_table": "orders",
+          "target_columns": [
+            "customer_id"
+          ],
+          "t_before_ms": 0.8541,
+          "t_after_ms": 0.4826,
+          "cov_before": 0.5424,
+          "cov_after": 0.2136,
+          "runtime_improvement_percent": 43.49,
+          "scan_type_before": "Seq Scan",
+          "scan_type_after": "Bitmap Heap Scan",
+          "shared_hit_blocks_before": 45,
+          "shared_hit_blocks_after": 12,
+          "cleanup_success": true
+        }
+      }
+    ],
+    "oracle": {
+      "candidate_id": "cand_orders_customer_id",
+      "columns": [
+        "customer_id"
+      ],
+      "runtime_improvement_percent": 43.49,
+      "t_after_ms": 0.4826
+    },
+    "policy_evaluations": {
+      "policy_a": {
+        "selected_candidate_id": "cand_orders_customer_id",
+        "selected_columns": [
+          "customer_id"
+        ],
+        "t_after_ms": 0.4826,
+        "runtime_improvement_percent": 43.49,
+        "oracle_improvement_percent": 43.49,
+        "selection_regret_percent": 0.0,
+        "is_oracle": true,
+        "fallback_used": false
+      },
+      "policy_b": {
+        "selected_candidate_id": "cand_orders_customer_id",
+        "selected_columns": [
+          "customer_id"
+        ],
+        "t_after_ms": 0.4826,
+        "runtime_improvement_percent": 43.49,
+        "oracle_improvement_percent": 43.49,
+        "selection_regret_percent": 0.0,
+        "is_oracle": true,
+        "fallback_used": true
+      },
+      "policy_c": {
+        "selected_candidate_id": "cand_orders_customer_id",
+        "selected_columns": [
+          "customer_id"
+        ],
+        "t_after_ms": 0.4826,
+        "runtime_improvement_percent": 43.49,
+        "oracle_improvement_percent": 43.49,
+        "selection_regret_percent": 0.0,
+        "is_oracle": true,
+        "fallback_used": true
+      }
+    }
+  },
+  {
+    "case_id": "CASE-T8-02",
+    "template_id": "T8",
+    "query_text": "SELECT * FROM orders WHERE customer_id = 105 AND status = 'SHIPPED';",
+    "target_table": "orders",
+    "eligible_candidates_evaluated": 1,
+    "candidate_benchmarks": [
+      {
+        "candidate_id": "cand_orders_customer_id",
+        "columns": [
+          "customer_id"
+        ],
+        "is_baseline": true,
+        "canonical_key": "orders:btree:customer_id",
+        "hypopg_cost_improvement": 76.52,
+        "benchmark": {
+          "index_name": "idx_autodba_exp_orders_customer_id",
+          "target_table": "orders",
+          "target_columns": [
+            "customer_id"
+          ],
+          "t_before_ms": 0.6988,
+          "t_after_ms": 0.6894,
+          "cov_before": 0.163,
+          "cov_after": 0.7748,
+          "runtime_improvement_percent": 1.35,
+          "scan_type_before": "Seq Scan",
+          "scan_type_after": "Bitmap Heap Scan",
+          "shared_hit_blocks_before": 45,
+          "shared_hit_blocks_after": 12,
+          "cleanup_success": true
+        }
+      }
+    ],
+    "oracle": {
+      "candidate_id": "cand_orders_customer_id",
+      "columns": [
+        "customer_id"
+      ],
+      "runtime_improvement_percent": 1.35,
+      "t_after_ms": 0.6894
+    },
+    "policy_evaluations": {
+      "policy_a": {
+        "selected_candidate_id": "cand_orders_customer_id",
+        "selected_columns": [
+          "customer_id"
+        ],
+        "t_after_ms": 0.6894,
+        "runtime_improvement_percent": 1.35,
+        "oracle_improvement_percent": 1.35,
+        "selection_regret_percent": 0.0,
+        "is_oracle": true,
+        "fallback_used": false
+      },
+      "policy_b": {
+        "selected_candidate_id": "cand_orders_customer_id",
+        "selected_columns": [
+          "customer_id"
+        ],
+        "t_after_ms": 0.6894,
+        "runtime_improvement_percent": 1.35,
+        "oracle_improvement_percent": 1.35,
+        "selection_regret_percent": 0.0,
+        "is_oracle": true,
+        "fallback_used": true
+      },
+      "policy_c": {
+        "selected_candidate_id": "cand_orders_customer_id",
+        "selected_columns": [
+          "customer_id"
+        ],
+        "t_after_ms": 0.6894,
+        "runtime_improvement_percent": 1.35,
+        "oracle_improvement_percent": 1.35,
+        "selection_regret_percent": 0.0,
+        "is_oracle": true,
+        "fallback_used": true
+      }
+    }
+  }
+]

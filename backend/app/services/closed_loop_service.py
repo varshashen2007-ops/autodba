@@ -28,9 +28,11 @@ from app.db.database import engine as default_engine
 from app.schemas.optimization import (
     ApprovalRequest,
     BenchmarkResult,
+    CaseProvenance,
     OptimizationMemory,
     OptimizationOutcome,
     OptimizationRecommendation,
+    OutcomeVerificationState,
     RemediationResult,
 )
 from app.services.approval_service import default_approval_service
@@ -135,6 +137,22 @@ class ClosedLoopService:
 
         recommendation_dict = approval.recommendation.model_dump(mode="json")
 
+        # ------------------------------------------------------------------
+        # Provenance: a case is MEASURED+verified only when the full pipeline
+        # completed successfully with a passing post-remediation verification.
+        # ------------------------------------------------------------------
+        is_verified = (
+            benchmark.status.value == "completed"
+            and remediation.status.value in ("applied", "already_applied")
+            and remediation.verification_passed
+        )
+        provenance = CaseProvenance.MEASURED if is_verified else CaseProvenance.UNVERIFIED
+        verification_state = (
+            OutcomeVerificationState.VERIFIED_MEASURED
+            if is_verified
+            else OutcomeVerificationState.UNVERIFIED
+        )
+
         memory = self.memory_service.create_memory(
             incident_type=incident_type,
             query_text=query_text,
@@ -144,6 +162,9 @@ class ClosedLoopService:
             benchmark=benchmark_dict,
             outcome=None,
             outcome_summary=self._build_outcome_summary(benchmark),
+            provenance=provenance,
+            is_verified=is_verified,
+            verification_state=verification_state,
         )
 
         return {

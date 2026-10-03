@@ -1,0 +1,147 @@
+{
+  "description": "Sample research evaluation cases for AutoDBA harness testing. Includes seeded, simulated, and real measured cases.",
+  "provenance_legend": {
+    "seeded": "Cases from seed_intelligence.py in the main application",
+    "simulated": "Synthetically generated cases for evaluation",
+    "real_measured": "Cases from actual closed-loop benchmarking"
+  },
+  "cases": [
+    {
+      "case_id": "seed-001",
+      "provenance": "seeded",
+      "incident_type": "missing_index",
+      "query": "SELECT * FROM orders WHERE customer_id = 42",
+      "plan": {
+        "root_node": "Seq Scan",
+        "estimated_cost": 107.50,
+        "scan_type": "seq_scan",
+        "index_used": false
+      },
+      "recommendation": {
+        "action": "create_index",
+        "table": "orders",
+        "columns": ["customer_id"],
+        "sql_preview": "CREATE INDEX ON orders (customer_id);"
+      },
+      "hypopg_validation": {
+        "validated": true,
+        "cost_before": 107.50,
+        "cost_after": 28.16,
+        "improvement_pct": 73.80
+      },
+      "outcome": {
+        "runtime_before_ms": 150.0,
+        "runtime_after_ms": 60.0,
+        "runtime_improvement_pct": 87.90,
+        "plan_changed": true,
+        "index_used_before": false,
+        "index_used_after": true,
+        "benchmarked": true
+      },
+      "measurement_quality": "high"
+    },
+    {
+      "case_id": "seed-002",
+      "provenance": "seeded",
+      "incident_type": "expensive_sort",
+      "query": "SELECT * FROM orders ORDER BY order_date DESC",
+      "plan": {
+        "root_node": "Sort",
+        "estimated_cost": 850.0,
+        "scan_type": "index_scan",
+        "index_used": false
+      },
+      "recommendation": {
+        "action": "create_index",
+        "table": "orders",
+        "columns": ["order_date"],
+        "sql_preview": "CREATE INDEX ON orders (order_date);"
+      },
+      "hypopg_validation": {
+        "validated": true,
+        "cost_before": null,
+        "cost_after": null,
+        "improvement_pct": 61.20
+      },
+      "outcome": {
+        "runtime_before_ms": 200.0,
+        "runtime_after_ms": 91.4,
+        "runtime_improvement_pct": 54.30,
+        "plan_changed": true,
+        "index_used_before": false,
+        "index_used_after": true,
+        "benchmarked": true
+      },
+      "measurement_quality": "high"
+    },
+    {
+      "case_id": "sim-001",
+      "provenance": "simulated",
+      "incident_type": "expensive_nested_loop",
+      "query": "SELECT * FROM orders o JOIN customers c ON o.customer_id = c.id WHERE c.id = 99",
+      "plan": {
+        "root_node": "Nested Loop",
+        "estimated_cost": 1250.0,
+        "scan_type": "nested_loop",
+        "index_used": false
+      },
+      "recommendation": {
+        "action": "investigate_index",
+        "table": "orders",
+        "columns": ["customer_id"],
+        "sql_preview": null
+      },
+      "hypopg_validation": {
+        "validated": true,
+        "cost_before": null,
+        "cost_after": null,
+        "improvement_pct": 48.50
+      },
+      "outcome": {
+        "runtime_before_ms": 300.0,
+        "runtime_after_ms": 173.7,
+        "runtime_improvement_pct": 42.10,
+        "plan_changed": true,
+        "index_used_before": false,
+        "index_used_after": true,
+        "benchmarked": true
+      },
+      "measurement_quality": "medium"
+    },
+    {
+      "case_id": "sim-002",
+      "provenance": "simulated",
+      "incident_type": "large_row_estimate",
+      "query": "SELECT * FROM order_items WHERE product_id = 17",
+      "plan": {
+        "root_node": "Seq Scan",
+        "estimated_cost": 45.0,
+        "estimated_rows": 15000,
+        "scan_type": "seq_scan",
+        "index_used": false
+      },
+      "recommendation": {
+        "action": "analyze_table",
+        "table": "order_items",
+        "columns": [],
+        "sql_preview": "ANALYZE TABLE order_items;"
+      },
+      "hypopg_validation": {
+        "validated": false,
+        "cost_before": null,
+        "cost_after": null,
+        "improvement_pct": 0.0
+      },
+      "outcome": {
+        "runtime_before_ms": 80.0,
+        "runtime_after_ms": 65.9,
+        "runtime_improvement_pct": 18.40,
+        "plan_changed": false,
+        "index_used_before": false,
+        "index_used_after": false,
+        "benchmarked": true
+      },
+      "measurement_quality": "medium"
+    }
+  ]
+}

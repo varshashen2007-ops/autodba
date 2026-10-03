@@ -1,0 +1,351 @@
+{
+  "manifest_version": "1.0.0",
+  "created_at": "2026-10-01T17:24:00Z",
+  "status": "DESIGN_ONLY",
+  "note": "No measurements have been performed. All eligibility and support fields are design-time predictions derived from static code analysis and read-only database inspection.",
+  "phase": "7",
+  "description": "Phase 7 targeted corpus expansion — designed to give Policies B and C a genuine opportunity to use historical candidate-key evidence on previously unseen query templates.",
+  "frozen_train_retrieval": {
+    "memory_ids": [1, 2, 3, 4, 5, 6],
+    "templates": ["T1", "T2"],
+    "candidate_keys": [
+      "orders:btree:customer_id",
+      "orders:btree:total_amount"
+    ]
+  },
+  "phase6c_partition_manifest_sha256": "b91429205d36f572e5108bd7a66771f001de89631b810ac26d111771ce8c3d27",
+  "phase6c_partition_unchanged": true,
+  "proposed_cases": [
+    {
+      "case_id": "CASE-TP-A-01",
+      "template_id": "TP-A",
+      "canonical_template": "select * from orders where total_amount > ? and status = ?",
+      "template_hash": "815f3236a3ee1069f642e7d0e1e5f2ef3c4ea47b43c65c6e62d01a6acd38f7e2",
+      "sql": "SELECT * FROM orders WHERE total_amount > 200.00 AND status = 'PENDING';",
+      "target_table": "orders",
+      "predicate_columns": ["total_amount", "status"],
+      "predicted_candidate_pool": [
+        {
+          "candidate_id": "cand_orders_total_amount_status",
+          "columns": ["total_amount", "status"],
+          "canonical_key": "orders:btree:total_amount,status",
+          "is_baseline": true,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": true,
+          "predicted_safety_eligible": true
+        },
+        {
+          "candidate_id": "cand_orders_total_amount",
+          "columns": ["total_amount"],
+          "canonical_key": "orders:btree:total_amount",
+          "is_baseline": false,
+          "train_match_count": 3,
+          "train_memory_ids": [4, 5, 6],
+          "train_measured_deltas_pct": [72.37, 96.81, 64.79],
+          "predicted_hypopg_eligible": true,
+          "predicted_safety_eligible": true
+        },
+        {
+          "candidate_id": "cand_orders_status",
+          "columns": ["status"],
+          "canonical_key": "orders:btree:status",
+          "is_baseline": false,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": "uncertain — low cardinality (5 values, ~20% selectivity)",
+          "predicted_safety_eligible": true
+        }
+      ],
+      "predicted_pool_size_min": 2,
+      "predicted_pool_size_max": 3,
+      "multi_candidate": true,
+      "b_c_exerciseable": true,
+      "b_c_exerciseable_reason": "orders:btree:total_amount has 3 TRAIN matches (IDs 4,5,6); baseline orders:btree:total_amount,status has 0 TRAIN matches. B/C expected to boost (total_amount) over composite.",
+      "proposed_partition_role": "TEST",
+      "design_only": true,
+      "rationale": "Primary exerciseable case: TRAIN-matched single-col candidate (total_amount) competes against TRAIN-unmatched composite baseline. Genuine opportunity for B/C to diverge from A."
+    },
+    {
+      "case_id": "CASE-TP-A-02",
+      "template_id": "TP-A",
+      "canonical_template": "select * from orders where total_amount > ? and status = ?",
+      "template_hash": "815f3236a3ee1069f642e7d0e1e5f2ef3c4ea47b43c65c6e62d01a6acd38f7e2",
+      "sql": "SELECT * FROM orders WHERE total_amount > 350.00 AND status = 'SHIPPED';",
+      "target_table": "orders",
+      "predicate_columns": ["total_amount", "status"],
+      "predicted_candidate_pool": [
+        {
+          "candidate_id": "cand_orders_total_amount_status",
+          "columns": ["total_amount", "status"],
+          "canonical_key": "orders:btree:total_amount,status",
+          "is_baseline": true,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": true,
+          "predicted_safety_eligible": true
+        },
+        {
+          "candidate_id": "cand_orders_total_amount",
+          "columns": ["total_amount"],
+          "canonical_key": "orders:btree:total_amount",
+          "is_baseline": false,
+          "train_match_count": 3,
+          "train_memory_ids": [4, 5, 6],
+          "train_measured_deltas_pct": [72.37, 96.81, 64.79],
+          "predicted_hypopg_eligible": true,
+          "predicted_safety_eligible": true
+        },
+        {
+          "candidate_id": "cand_orders_status",
+          "columns": ["status"],
+          "canonical_key": "orders:btree:status",
+          "is_baseline": false,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": "uncertain — low cardinality",
+          "predicted_safety_eligible": true
+        }
+      ],
+      "predicted_pool_size_min": 2,
+      "predicted_pool_size_max": 3,
+      "multi_candidate": true,
+      "b_c_exerciseable": true,
+      "b_c_exerciseable_reason": "Same TRAIN evidence as TP-A-01 but different parameter values (higher threshold, different status). Tests policy consistency across parameter variation within the same template.",
+      "proposed_partition_role": "TEST",
+      "design_only": true,
+      "rationale": "Within-template variation for TP-A; tests policy consistency across different parameter selectivities."
+    },
+    {
+      "case_id": "CASE-TP-A-03",
+      "template_id": "TP-A",
+      "canonical_template": "select * from orders where total_amount > ? and status = ?",
+      "template_hash": "815f3236a3ee1069f642e7d0e1e5f2ef3c4ea47b43c65c6e62d01a6acd38f7e2",
+      "sql": "SELECT * FROM orders WHERE total_amount > 150.00 AND status = 'COMPLETED';",
+      "target_table": "orders",
+      "predicate_columns": ["total_amount", "status"],
+      "predicted_candidate_pool": [
+        {
+          "candidate_id": "cand_orders_total_amount_status",
+          "columns": ["total_amount", "status"],
+          "canonical_key": "orders:btree:total_amount,status",
+          "is_baseline": true,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": true,
+          "predicted_safety_eligible": true
+        },
+        {
+          "candidate_id": "cand_orders_total_amount",
+          "columns": ["total_amount"],
+          "canonical_key": "orders:btree:total_amount",
+          "is_baseline": false,
+          "train_match_count": 3,
+          "train_memory_ids": [4, 5, 6],
+          "train_measured_deltas_pct": [72.37, 96.81, 64.79],
+          "predicted_hypopg_eligible": true,
+          "predicted_safety_eligible": true
+        },
+        {
+          "candidate_id": "cand_orders_status",
+          "columns": ["status"],
+          "canonical_key": "orders:btree:status",
+          "is_baseline": false,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": "uncertain — low cardinality",
+          "predicted_safety_eligible": true
+        }
+      ],
+      "predicted_pool_size_min": 2,
+      "predicted_pool_size_max": 3,
+      "multi_candidate": true,
+      "b_c_exerciseable": true,
+      "b_c_exerciseable_reason": "Lower total_amount threshold (>150) increases selectivity. Tests whether higher row density affects planner cost estimates and thus candidate scoring.",
+      "proposed_partition_role": "TEST",
+      "design_only": true,
+      "rationale": "Lower threshold variant; higher row selectivity may reduce measured ΔT% and tests regime where composite might outperform single-col."
+    },
+    {
+      "case_id": "CASE-TP-D-01",
+      "template_id": "TP-D",
+      "canonical_template": "select * from orders where status = ? and total_amount > ?",
+      "template_hash": "6e7c69115154e2049a4e0ce9cb95b36db4edccbf63ae98bcb4a53c26d39f2c0e",
+      "sql": "SELECT * FROM orders WHERE status = 'CANCELLED' AND total_amount > 250.00;",
+      "target_table": "orders",
+      "predicate_columns": ["status", "total_amount"],
+      "predicted_candidate_pool": [
+        {
+          "candidate_id": "cand_orders_status_total_amount",
+          "columns": ["status", "total_amount"],
+          "canonical_key": "orders:btree:status,total_amount",
+          "is_baseline": true,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": true,
+          "predicted_safety_eligible": true
+        },
+        {
+          "candidate_id": "cand_orders_status",
+          "columns": ["status"],
+          "canonical_key": "orders:btree:status",
+          "is_baseline": false,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": "uncertain — low cardinality",
+          "predicted_safety_eligible": true
+        },
+        {
+          "candidate_id": "cand_orders_total_amount",
+          "columns": ["total_amount"],
+          "canonical_key": "orders:btree:total_amount",
+          "is_baseline": false,
+          "train_match_count": 3,
+          "train_memory_ids": [4, 5, 6],
+          "train_measured_deltas_pct": [72.37, 96.81, 64.79],
+          "predicted_hypopg_eligible": true,
+          "predicted_safety_eligible": true
+        }
+      ],
+      "predicted_pool_size_min": 2,
+      "predicted_pool_size_max": 3,
+      "multi_candidate": true,
+      "b_c_exerciseable": true,
+      "b_c_exerciseable_reason": "Identical TRAIN evidence as TP-A (total_amount matches IDs 4,5,6) but different template hash. Tests whether B/C behave consistently with the same evidence across differently-ordered predicates.",
+      "proposed_partition_role": "TEST",
+      "design_only": true,
+      "rationale": "Different template (status predicate first) but same candidate pool. Tests cross-template consistency of outcome-aware ranking."
+    },
+    {
+      "case_id": "CASE-TP-D-02",
+      "template_id": "TP-D",
+      "canonical_template": "select * from orders where status = ? and total_amount > ?",
+      "template_hash": "6e7c69115154e2049a4e0ce9cb95b36db4edccbf63ae98bcb4a53c26d39f2c0e",
+      "sql": "SELECT * FROM orders WHERE status = 'PROCESSING' AND total_amount > 100.00;",
+      "target_table": "orders",
+      "predicate_columns": ["status", "total_amount"],
+      "predicted_candidate_pool": [
+        {
+          "candidate_id": "cand_orders_status_total_amount",
+          "columns": ["status", "total_amount"],
+          "canonical_key": "orders:btree:status,total_amount",
+          "is_baseline": true,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": true,
+          "predicted_safety_eligible": true
+        },
+        {
+          "candidate_id": "cand_orders_status",
+          "columns": ["status"],
+          "canonical_key": "orders:btree:status",
+          "is_baseline": false,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": "uncertain — low cardinality",
+          "predicted_safety_eligible": true
+        },
+        {
+          "candidate_id": "cand_orders_total_amount",
+          "columns": ["total_amount"],
+          "canonical_key": "orders:btree:total_amount",
+          "is_baseline": false,
+          "train_match_count": 3,
+          "train_memory_ids": [4, 5, 6],
+          "train_measured_deltas_pct": [72.37, 96.81, 64.79],
+          "predicted_hypopg_eligible": true,
+          "predicted_safety_eligible": true
+        }
+      ],
+      "predicted_pool_size_min": 2,
+      "predicted_pool_size_max": 3,
+      "multi_candidate": true,
+      "b_c_exerciseable": true,
+      "b_c_exerciseable_reason": "Very low threshold (>100) returns ~80% of orders. Tests edge case where neither candidate may show strong improvement, but B/C still have TRAIN evidence to apply.",
+      "proposed_partition_role": "TEST",
+      "design_only": true,
+      "rationale": "Low selectivity edge case for TP-D. At this threshold planner may prefer sequential scan; HypoPG may reject both candidates. Included to test fail-closed behavior."
+    },
+    {
+      "case_id": "CASE-TP-B-01",
+      "template_id": "TP-B",
+      "canonical_template": "select * from orders where order_date >= ? and total_amount > ?",
+      "template_hash": "f6d14dd0fecf32e32b6e9e4a5a2c3cf17b0e5ad90ddf8e3b1c4e7f52a08b9d21",
+      "sql": "SELECT * FROM orders WHERE order_date >= '2025-02-15' AND total_amount > 200.00;",
+      "target_table": "orders",
+      "predicate_columns": ["order_date", "total_amount"],
+      "predicted_candidate_pool": [
+        {
+          "candidate_id": "cand_orders_order_date_total_amount",
+          "columns": ["order_date", "total_amount"],
+          "canonical_key": "orders:btree:order_date,total_amount",
+          "is_baseline": true,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": "uncertain — existing idx_orders_order_date may interact with composite",
+          "predicted_safety_eligible": "uncertain"
+        },
+        {
+          "candidate_id": "cand_orders_order_date",
+          "columns": ["order_date"],
+          "canonical_key": "orders:btree:order_date",
+          "is_baseline": false,
+          "train_match_count": 0,
+          "train_memory_ids": [],
+          "predicted_hypopg_eligible": "likely NO_IMPROVEMENT — idx_orders_order_date already exists",
+          "predicted_safety_eligible": "likely blocked by equivalent index detection"
+        },
+        {
+          "candidate_id": "cand_orders_total_amount",
+          "columns": ["total_amount"],
+          "canonical_key": "orders:btree:total_amount",
+          "is_baseline": false,
+          "train_match_count": 3,
+          "train_memory_ids": [4, 5, 6],
+          "train_measured_deltas_pct": [72.37, 96.81, 64.79],
+          "predicted_hypopg_eligible": true,
+          "predicted_safety_eligible": true
+        }
+      ],
+      "predicted_pool_size_min": 1,
+      "predicted_pool_size_max": 3,
+      "multi_candidate": "uncertain",
+      "b_c_exerciseable": "conditional — only if order_date candidates survive HypoPG and safety",
+      "b_c_exerciseable_reason": "If order_date candidates are rejected by existing-index detection or HypoPG NO_IMPROVEMENT, the eligible pool reduces to (total_amount) only — single candidate, trivial agreement.",
+      "proposed_partition_role": "TEST (supplementary, lower confidence)",
+      "design_only": true,
+      "rationale": "Supplementary case. Included to explore whether the existing order_date index causes Phase 1 to reduce candidate pool. Acts as a natural stress test of the SafetyAssessor / HypoPG rejection path."
+    }
+  ],
+  "excluded_templates": [
+    {
+      "template_id": "TP-C",
+      "canonical": "select * from order_items where unit_price > ?",
+      "exclusion_reason": "Single column, single candidate. No TRAIN key match (TRAIN covers orders only). Guaranteed B/C fallback. No experiment value."
+    },
+    {
+      "template_id": "TP-E",
+      "canonical": "select * from order_items where product_id = ? and quantity > ?",
+      "exclusion_reason": "No TRAIN key matches (TRAIN is orders-only). idx_order_items_product_id already exists and will block product_id single-col candidate. Remaining quantity candidate also has no TRAIN match. Guaranteed B/C fallback."
+    }
+  ],
+  "partition_design": {
+    "train_retrieval_corpus": {
+      "source": "frozen Phase 6A corpus, IDs 1-6 only",
+      "templates": ["T1", "T2"],
+      "note": "Unchanged from Phase 6C. Not modified by Phase 7."
+    },
+    "phase7_test": {
+      "primary_cases": ["CASE-TP-A-01", "CASE-TP-A-02", "CASE-TP-A-03", "CASE-TP-D-01", "CASE-TP-D-02"],
+      "supplementary_cases": ["CASE-TP-B-01"],
+      "note": "Phase 7 outcomes are NEVER persisted to optimization_memories. Research artifacts only."
+    }
+  },
+  "benchmark_protocol": {
+    "warmup_runs": 2,
+    "measured_runs": 10,
+    "selection_before_measurement": true,
+    "oracle_determination": "exhaustive physical benchmarking of all eligible candidates per case",
+    "cleanup_required": "DROP each idx_autodba_* immediately after benchmarking"
+  }
+}

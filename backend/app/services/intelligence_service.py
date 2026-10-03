@@ -15,16 +15,23 @@ from typing import Any, Dict, Optional
 from sqlalchemy.orm import Session
 
 from app.schemas.optimization import (
+    BottleneckFinding,
+    BottleneckType,
+    CandidateEvaluation,
     DiagnoseRequest,
     DiagnoseResponse,
     DiagnosisResult,
+    HypotheticalIndexRequest,
+    IndexMethod,
 )
 from app.services.bottleneck_detector import BottleneckDetector
 from app.services.database_monitor import DatabaseMonitorService
+from app.services.hypopg_validator import HypoPGValidatorService
 from app.services.llm_service import LLMService
 from app.services.plan_analyzer import PlanAnalyzer
 from app.services.rag_service import RAGService
 from app.services.recommendation_engine import RecommendationEngine
+from app.services.safety_assessor import SafetyAssessor
 
 
 class IntelligenceService:
@@ -92,6 +99,12 @@ class IntelligenceService:
 
         resolved_recommendation = recommendation or generated_recommendation
 
+        # Deterministic candidate evaluation for MISSING_INDEX findings
+        candidate_evaluations = self._evaluate_candidates(
+            query=explain_result.query,
+            findings=detected_findings,
+        )
+
         resolved_incident_type = (
             incident_type
             or request.incident_type
@@ -113,6 +126,7 @@ class IntelligenceService:
             analysis=deterministic_analysis,
             findings=deterministic_findings,
             recommendation=resolved_recommendation,
+            candidate_evaluations=candidate_evaluations,
             rag_context=rag_context,
         )
 
@@ -138,6 +152,95 @@ class IntelligenceService:
             llm_explanation=llm_explanation,
             llm_provider="groq",
         )
+
+    def _evaluate_candidates(
+        self,
+        *,
+        query: str,
+        findings: list[BottleneckFinding],
+    ) -> list[CandidateEvaluation]:
+        """
+        Deterministically evaluates index optimization candidates for MISSING_INDEX findings.
+
+        1. Generates baseline and single-column candidate definitions strictly from
+           columns extractable by RecommendationEngine.extract_candidate_columns.
+        2. Deduplicates candidates deterministically using canonical keys.
+        3. Independently validates each candidate via HypoPGValidatorService.
+        4. Generates an OptimizationRecommendation for each candidate.
+        5. Evaluates each candidate through SafetyAssessor to determine approval eligibility.
+        """
+        evaluations: list[CandidateEvaluation] = []
+        seen_canonical_keys: set[tuple[str, str, tuple[str, ...]]] = set()
+
+        for finding in findings:
+            if finding.finding_type != BottleneckType.MISSING_INDEX:
+                continue
+
+            table = finding.relation or finding.evidence.get("relation")
+            if not table or table == "<unknown>":
+                continue
+
+            extracted_cols = RecommendationEngine.extract_candidate_columns(finding)
+            if not extracted_cols:
+                continue
+
+            # 1. Baseline candidate definition (all extracted columns)
+            # 2. Single-column candidate definitions (each individual extracted column)
+            candidate_definitions: list[tuple[list[str], bool]] = [
+                (extracted_cols, True),
+            ]
+            for col in extracted_cols:
+                candidate_definitions.append(([col], False))
+
+            for cols, is_baseline in candidate_definitions:
+                canonical_key = (
+                    table.strip().lower(),
+                    IndexMethod.BTREE.value.lower(),
+                    tuple(c.strip().lower() for c in cols if c and c.strip()),
+                )
+
+                if not canonical_key[2] or canonical_key in seen_canonical_keys:
+                    continue
+
+                seen_canonical_keys.add(canonical_key)
+
+                # Step A: Validate candidate via HypoPG
+                val_req = HypotheticalIndexRequest(
+                    query=query,
+                    table=table,
+                    columns=cols,
+                    index_method=IndexMethod.BTREE,
+                )
+                validation_result = HypoPGValidatorService.validate_candidate(
+                    request=val_req,
+                    db=self.db,
+                )
+
+                # Step B: Generate deterministic recommendation for this candidate
+                cand_rec = RecommendationEngine.recommend(
+                    finding=finding,
+                    validation=validation_result,
+                )
+
+                # Step C: Assess safety and approval eligibility
+                safety_assessment = SafetyAssessor.assess(
+                    recommendation=cand_rec,
+                )
+
+                col_suffix = "_".join(canonical_key[2])
+                candidate_id = f"cand_{canonical_key[0]}_{col_suffix}"
+
+                evaluations.append(
+                    CandidateEvaluation(
+                        candidate_id=candidate_id,
+                        recommendation=cand_rec,
+                        validation=validation_result,
+                        safety_assessment=safety_assessment,
+                        is_baseline=is_baseline,
+                    )
+                )
+
+        return evaluations
 
     @staticmethod
     def _infer_incident_type(findings: list[Dict[str, Any]]) -> str:
