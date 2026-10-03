@@ -13,6 +13,8 @@ from typing import Any, Dict, List, Optional
 
 from groq import Groq
 
+from app.core.logging import logger
+
 
 class LLMProvider(ABC):
     """Abstract interface for an AutoDBA LLM provider."""
@@ -157,13 +159,34 @@ class LLMService:
         diagnosis: Dict[str, Any],
         recommendation: Optional[Dict[str, Any]] = None,
         similar_cases: Optional[List[Dict[str, Any]]] = None,
-    ) -> str:
-        return self.provider.explain(
-            query=query,
-            diagnosis=diagnosis,
-            recommendation=recommendation,
-            similar_cases=similar_cases or [],
-        )
+    ) -> Optional[str]:
+        """Generate the advisory explanation.
+
+        The LLM layer is strictly advisory: it must never break the
+        deterministic pipeline. Any provider failure (missing credentials,
+        rate limits, oversized requests, network errors) is logged and
+        degrades to ``None`` so the authoritative deterministic result is
+        still returned to the caller.
+        """
+
+        try:
+            return self.provider.explain(
+                query=query,
+                diagnosis=diagnosis,
+                recommendation=recommendation,
+                similar_cases=similar_cases or [],
+            )
+        except Exception as exc:
+            logger.warning(
+                "LLM explanation unavailable; deterministic diagnosis unaffected",
+                extra={
+                    "provider": type(self.provider).__name__,
+                    "model": getattr(self.provider, "model", None),
+                    "error_type": type(exc).__name__,
+                    "error": str(exc),
+                },
+            )
+            return None
 
 
 def get_llm_service() -> LLMService:

@@ -1,0 +1,251 @@
+{
+  "experiment_protocol": "Phase 8 Multi-Candidate Extension Experiment",
+  "protocol_version": "1.0.0",
+  "phase": "8",
+  "status": "DESIGN_LOCKED",
+  "created_at": "2026-10-03T06:54:35Z",
+  "design_document": "research/PHASE8_MULTI_CANDIDATE_DESIGN.md",
+  "pre_execution_audit": "research/PHASE8_PRE_EXECUTION_AUDIT.md",
+
+  "ancestry": {
+    "phase6c_partition_manifest_sha256": "b91429205d36f572e5108bd7a66771f001de89631b810ac26d111771ce8c3d27",
+    "phase6d_manifest_path": "research/phase6d_experiment_manifest.json",
+    "phase7_manifest_path": "research/phase7_experiment_manifest.json",
+    "extends_phase6c_partition": true,
+    "modifies_phase6c_partition": false,
+    "modifies_phase6d_results": false,
+    "modifies_phase7_results": false
+  },
+
+  "query": {
+    "raw_sql": "SELECT * FROM orders WHERE customer_id = 42 AND total_amount >= 450.00",
+    "canonical_template": "select * from orders where customer_id = ? and total_amount >= ?",
+    "template_hash": "8aabaf56804e4478ebb2c6e90e5e4311c1a945b1cb71cc026fc4979453955343",
+    "template_id": "T9",
+    "target_table": "orders",
+    "incident_type": "missing_index",
+    "operator_used": ">=",
+    "note": ">=  is preserved by canonicalize_sql (not collapsed to >). T9 is structurally distinct from T3 (DEV, uses >)."
+  },
+
+  "partition_role": {
+    "partition": "TEST",
+    "sub_partition": "Phase_8_Extension",
+    "is_in_phase6c_corpus": false,
+    "is_in_phase6d_test": false,
+    "is_in_train": false,
+    "is_in_dev": false,
+    "disjoint_from_all_existing_partitions": true,
+    "hash_verification_script": "research/scratch/phase8_hash_verify.py"
+  },
+
+  "retrieval_corpus": {
+    "partition": "TRAIN",
+    "memory_ids": [1, 2, 3, 4, 5, 6],
+    "templates": ["T1", "T2"],
+    "case_count": 6,
+    "provenance_filter": "measured",
+    "is_verified_filter": true,
+    "verification_state_filter": "verified_measured",
+    "source_manifest_sha256": "b91429205d36f572e5108bd7a66771f001de89631b810ac26d111771ce8c3d27"
+  },
+
+  "candidate_set": [
+    {
+      "candidate_id": "cand_orders_total_amount_customer_id",
+      "canonical_key": "orders:btree:(total_amount,customer_id)",
+      "canonical_tuple": ["orders", "btree", ["total_amount", "customer_id"]],
+      "columns": ["total_amount", "customer_id"],
+      "index_method": "btree",
+      "is_baseline": true,
+      "hypopg_validated": true,
+      "hypopg_cost_before": 120.0,
+      "hypopg_cost_after": 14.94,
+      "hypopg_cost_improvement_pct": 87.55,
+      "safety_eligible": true,
+      "train_support_memory_ids": [],
+      "train_support_count": 0,
+      "policy_b_eligible_support": false,
+      "policy_c_eligible_support": false,
+      "note": "Composite baseline. Zero TRAIN support. ID 7 (T3, DEV) has this key but is excluded from TRAIN corpus."
+    },
+    {
+      "candidate_id": "cand_orders_total_amount",
+      "canonical_key": "orders:btree:(total_amount,)",
+      "canonical_tuple": ["orders", "btree", ["total_amount"]],
+      "columns": ["total_amount"],
+      "index_method": "btree",
+      "is_baseline": false,
+      "hypopg_validated": true,
+      "hypopg_cost_before": 120.0,
+      "hypopg_cost_after": 55.56,
+      "hypopg_cost_improvement_pct": 53.70,
+      "safety_eligible": true,
+      "train_support_memory_ids": [4, 5, 6],
+      "train_support_count": 3,
+      "train_support_template": "T2",
+      "policy_b_eligible_support": true,
+      "policy_c_eligible_support": true,
+      "note": "3 TRAIN matches from T2 (total_amount > ?). Supports both Policy B and C accumulation."
+    },
+    {
+      "candidate_id": "cand_orders_customer_id",
+      "canonical_key": "orders:btree:(customer_id,)",
+      "canonical_tuple": ["orders", "btree", ["customer_id"]],
+      "columns": ["customer_id"],
+      "index_method": "btree",
+      "is_baseline": false,
+      "hypopg_validated": true,
+      "hypopg_cost_before": 120.0,
+      "hypopg_cost_after": 28.18,
+      "hypopg_cost_improvement_pct": 76.52,
+      "safety_eligible": true,
+      "train_support_memory_ids": [1, 2, 3],
+      "train_support_count": 3,
+      "train_support_template": "T1",
+      "policy_b_eligible_support": true,
+      "policy_c_eligible_support": true,
+      "note": "3 TRAIN matches from T1 (customer_id = ?). Supports both Policy B and C accumulation."
+    }
+  ],
+
+  "policy_definitions": {
+    "policy_a": {
+      "name": "Planner-Only Baseline",
+      "implementation": "CandidateSelector.select_planner_only()",
+      "rule": "Select the unique candidate where is_baseline == True",
+      "historical_memory_used": false,
+      "expected_selection": "cand_orders_total_amount_customer_id",
+      "expected_selection_reason": "Composite is the Phase 1 baseline (is_baseline=True)"
+    },
+    "policy_b": {
+      "name": "Similarity-Based Selection",
+      "implementation": "CandidateSelector.select_similarity()",
+      "rule": "Rank by composite_score = hypopg_cost_improvement + (alpha * similarity_support). Tiebreak: hypopg_cost, is_baseline, candidate_id.",
+      "historical_memory_used": true,
+      "retrieval_corpus_ids": [1, 2, 3, 4, 5, 6],
+      "alpha": 1.0,
+      "fallback_expected": false,
+      "fallback_condition": "Would fall back only if zero TRAIN cases matched any candidate key (not the case here)",
+      "note": "Selection depends on whether similarity boost for (customer_id) or (total_amount) raises their scores above 87.55. Must be computed and frozen pre-measurement."
+    },
+    "policy_c": {
+      "name": "Outcome-Aware Selection",
+      "implementation": "CandidateSelector.select_outcome_aware()",
+      "rule": "Filter to verified measured cases. Rank by hypopg_cost_improvement + (beta * outcome_support). Asymmetric penalty lambda_reg for regressions.",
+      "historical_memory_used": true,
+      "retrieval_corpus_ids": [1, 2, 3, 4, 5, 6],
+      "eligible_measured_case_ids": [1, 2, 3, 4, 5, 6],
+      "beta": 1.0,
+      "lambda_reg": 1.5,
+      "fallback_expected": false,
+      "fallback_condition": "Would fall back only if zero verified measured cases matched any candidate key (not the case here)",
+      "note": "Selection depends on accumulated (sim * delta) for (total_amount) and (customer_id) vs. composite base of 87.55. Must be computed and frozen pre-measurement."
+    }
+  },
+
+  "oracle": {
+    "definition": "Candidate with maximum realized runtime_improvement_percent measured independently for all 3 eligible candidates",
+    "measurement_protocol": {
+      "warmup_runs": 2,
+      "measured_runs": 10,
+      "statistic": "median",
+      "index_isolation": "Each candidate created and dropped independently before the next is measured",
+      "cleanup_verification": "SELECT COUNT(*) FROM pg_indexes WHERE indexname LIKE 'idx_autodba_p8_%' must equal 0 after each teardown"
+    },
+    "independence_guarantee": "Oracle is determined after policy selections are frozen. Oracle result does not influence policy selections, parameters, or retrieval corpus."
+  },
+
+  "hyperparameters": {
+    "alpha": 1.0,
+    "beta": 1.0,
+    "lambda_reg": 1.5,
+    "warmup_runs": 2,
+    "measured_runs": 10,
+    "lock_status": "FROZEN",
+    "lock_source": "phase6d_experiment_manifest.json",
+    "tuning_basis": "TRAIN/DEV only (Phases 6D)",
+    "tuning_on_t9_prohibited": true
+  },
+
+  "experiment_seed": 42,
+
+  "sequencing_protocol": [
+    "Step 1: Verify Phase 6C manifest SHA-256 = b91429205d36f572e5108bd7a66771f001de89631b810ac26d111771ce8c3d27",
+    "Step 2: Verify optimization_memories COUNT = 14",
+    "Step 3: Load TRAIN cases (IDs 1-6 only)",
+    "Step 4: Load T9 candidate pool (3 candidates, as specified)",
+    "Step 5: Compute Policy A selection",
+    "Step 6: Compute Policy B selection",
+    "Step 7: Compute Policy C selection",
+    "Step 8: Write phase8_selection_results.json with timestamp",
+    "Step 9: [CHECKPOINT] Verify selection file written and timestamped",
+    "Step 10: Physically measure candidate 1 (composite), teardown, verify cleanup",
+    "Step 11: Physically measure candidate 2 (total_amount), teardown, verify cleanup",
+    "Step 12: Physically measure candidate 3 (customer_id), teardown, verify cleanup",
+    "Step 13: Determine oracle (max dT%)",
+    "Step 14: Compare policy selections vs oracle",
+    "Step 15: Verify optimization_memories COUNT = 14 (no writes)",
+    "Step 16: Verify 0 residual idx_autodba_p8_* indexes",
+    "Step 17: Write phase8_measurements.json",
+    "Step 18: Write PHASE8_EXECUTION_REPORT.md"
+  ],
+
+  "leakage_controls": {
+    "template_isolation": "T9 hash verified absent from all existing partitions (TRAIN, DEV, Phase 6D TEST, Phase 7 templates)",
+    "retrieval_boundary": "Policy B/C access only TRAIN IDs 1-6. DEV ID 7 excluded despite having composite candidate key.",
+    "outcome_isolation": "T9 physical measurements never written to optimization_memories",
+    "oracle_sequencing": "Policy selections frozen and timestamped before any CREATE INDEX executed",
+    "parameter_isolation": "alpha, beta, lambda_reg locked from Phase 6D; no tuning on T9 outcome"
+  },
+
+  "memory_write_restrictions": {
+    "read_memory_ids_allowed": [1, 2, 3, 4, 5, 6],
+    "write_memory_ids_allowed": [],
+    "optimization_memories_count_invariant": 14,
+    "t9_outcome_to_memories_prohibited": true
+  },
+
+  "stopping_criteria": {
+    "success": [
+      "Policy selections A/B/C frozen and written",
+      "All 3 eligible candidates physically measured",
+      "Oracle determined",
+      "All idx_autodba_p8_* indexes dropped",
+      "optimization_memories count = 14 verified",
+      "PHASE8_EXECUTION_REPORT.md written"
+    ],
+    "early_stop_conditions": [
+      "HypoPG validation fails for all 3 candidates: document and stop",
+      "Physical measurement regression: record as-is, do not re-run or adjust parameters"
+    ]
+  },
+
+  "methodological_limitation": {
+    "case_count": 1,
+    "statement": "This is currently ONE informative multi-candidate unseen-template case. One case is not sufficient for a strong comparative conclusion about policy superiority. The experiment can demonstrate whether policy divergence occurs and its direction, but cannot establish statistical significance or generalizability.",
+    "minimum_for_statistical_claim": "5-10 independent multi-candidate TEST cases across diverse templates and tables"
+  },
+
+  "expected_artifacts": {
+    "pre_execution": [
+      "research/PHASE8_MULTI_CANDIDATE_DESIGN.md",
+      "research/PHASE8_PRE_EXECUTION_AUDIT.md",
+      "research/phase8_experiment_manifest.json"
+    ],
+    "execution": [
+      "research/phase8_selection_results.json",
+      "research/phase8_measurements.json",
+      "research/PHASE8_EXECUTION_REPORT.md",
+      "research/PHASE8_AUDIT.md"
+    ]
+  },
+
+  "production_code_modified": false,
+  "phase6c_modified": false,
+  "phase6d_modified": false,
+  "phase7_modified": false,
+  "database_writes_performed": false,
+  "physical_indexes_created": false,
+  "optimization_memories_written": false
+}

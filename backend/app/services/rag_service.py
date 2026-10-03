@@ -11,7 +11,7 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
-from app.schemas.optimization import RAGContext
+from app.schemas.optimization import CaseProvenance, RAGContext
 from app.services.memory_service import MemoryService
 
 
@@ -35,6 +35,8 @@ class RAGService:
         incident_type: str,
         limit: int = DEFAULT_LIMIT,
         similarity_threshold: float = DEFAULT_SIMILARITY_THRESHOLD,
+        verified_only: bool = False,
+        provenance: Optional[CaseProvenance] = None,
     ) -> RAGContext:
         """
         Retrieve historically similar optimization cases.
@@ -48,6 +50,8 @@ class RAGService:
             incident_type=incident_type,
             limit=limit,
             similarity_threshold=similarity_threshold,
+            verified_only=verified_only,
+            provenance=provenance,
         )
 
         return RAGContext(
@@ -56,4 +60,5 @@ class RAGService:
             similar_cases=similar_cases,
             retrieval_count=len(similar_cases),
             retrieval_threshold=similarity_threshold,
+            verified_only=verified_only,
         )

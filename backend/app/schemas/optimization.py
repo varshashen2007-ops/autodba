@@ -472,6 +472,33 @@ class SafetyAssessment(BaseModel):
     model_config = {"populate_by_name": True}
 
 
+class CandidateEvaluation(BaseModel):
+    """Deterministic evaluation of an optimization candidate recommendation."""
+
+    candidate_id: str = Field(
+        ...,
+        description="Deterministic unique identifier for the candidate",
+    )
+    recommendation: OptimizationRecommendation = Field(
+        ...,
+        description="Candidate optimization recommendation",
+    )
+    validation: Optional[HypoPGValidationResult] = Field(
+        None,
+        description="HypoPG counterfactual validation result for this candidate",
+    )
+    safety_assessment: Optional[SafetyAssessment] = Field(
+        None,
+        description="Safety assessment evaluating approval eligibility for this candidate",
+    )
+    is_baseline: bool = Field(
+        False,
+        description="Whether this candidate represents the baseline recommendation",
+    )
+
+    model_config = {"populate_by_name": True}
+
+
 class ApprovalRequest(BaseModel):
     """Formal audit record and lifecycle tracker for a human approval request.
 
@@ -623,6 +650,21 @@ class OptimizationOutcome(str, Enum):
     NOT_BENCHMARKED = "not_benchmarked"
 
 
+class CaseProvenance(str, Enum):
+    """Data provenance / origin of a historical optimization case."""
+    MEASURED = "measured"        # Measured from live closed-loop execution & benchmarking
+    SEEDED = "seeded"            # Demonstration / test bootstrap seed data
+    SYNTHETIC = "synthetic"      # Artificially generated simulation or mock case
+    UNVERIFIED = "unverified"    # Legacy or unverified provenance
+
+
+class OutcomeVerificationState(str, Enum):
+    """Verification status of a historical optimization outcome."""
+    VERIFIED_MEASURED = "verified_measured"  # Verified by live post-remediation benchmark
+    UNVERIFIED = "unverified"                # Unverified / not backed by live execution
+    SYNTHETIC = "synthetic"                  # Synthetic or mock outcome
+
+
 class OptimizationMemory(BaseModel):
     """Historical optimization case stored for future retrieval."""
 
@@ -665,6 +707,18 @@ class OptimizationMemory(BaseModel):
     outcome_summary: Optional[str] = Field(
         None,
         description="Human-readable summary of the optimization outcome",
+    )
+    provenance: CaseProvenance = Field(
+        default=CaseProvenance.UNVERIFIED,
+        description="Data provenance of this historical memory record",
+    )
+    is_verified: bool = Field(
+        default=False,
+        description="Whether this memory is backed by verified measured benchmark evidence",
+    )
+    verification_state: OutcomeVerificationState = Field(
+        default=OutcomeVerificationState.UNVERIFIED,
+        description="Verification state of the recorded outcome",
     )
     embedding: List[float] = Field(
         default_factory=list,
@@ -762,6 +816,18 @@ class SimilarCase(BaseModel):
         None,
         description="Historical outcome summary",
     )
+    provenance: CaseProvenance = Field(
+        default=CaseProvenance.UNVERIFIED,
+        description="Data provenance of the historical case",
+    )
+    is_verified: bool = Field(
+        default=False,
+        description="Whether the outcome is verified measured evidence",
+    )
+    verification_state: OutcomeVerificationState = Field(
+        default=OutcomeVerificationState.UNVERIFIED,
+        description="Verification state of the historical outcome",
+    )
     similarity: float = Field(
         ...,
         ge=0.0,
@@ -807,6 +873,10 @@ class RAGContext(BaseModel):
         le=1.0,
         description="Minimum similarity threshold used during retrieval",
     )
+    verified_only: bool = Field(
+        False,
+        description="Whether retrieval was restricted to verified measured outcomes only",
+    )
 
 
 class DiagnosisResult(BaseModel):
@@ -831,6 +901,10 @@ class DiagnosisResult(BaseModel):
     recommendation: Optional[Dict[str, Any]] = Field(
         None,
         description="Deterministic optimization recommendation",
+    )
+    candidate_evaluations: List[CandidateEvaluation] = Field(
+        default_factory=list,
+        description="Deterministic candidate evaluations (HypoPG validation and safety assessment)",
     )
     rag_context: Optional[RAGContext] = Field(
         None,
@@ -888,6 +962,9 @@ class MemoryListItem(BaseModel):
     query_text: str
     outcome: OptimizationOutcome
     outcome_summary: Optional[str] = None
+    provenance: CaseProvenance = CaseProvenance.UNVERIFIED
+    is_verified: bool = False
+    verification_state: OutcomeVerificationState = OutcomeVerificationState.UNVERIFIED
     created_at: Optional[datetime] = None
 
 
@@ -914,6 +991,14 @@ class MemorySearchRequest(BaseModel):
         ge=0.0,
         le=1.0,
         description="Minimum cosine similarity required",
+    )
+    verified_only: bool = Field(
+        False,
+        description="Whether to restrict search results to verified measured outcomes only",
+    )
+    provenance: Optional[CaseProvenance] = Field(
+        None,
+        description="Optional provenance filter (e.g. 'measured', 'seeded')",
     )
 
 

@@ -1,0 +1,64 @@
+{
+  "experiment_protocol": "Phase 6D Comparative A/B/C vs Oracle",
+  "protocol_version": "1.0.0",
+  "timestamp": "2026-10-01T17:05:24.154729+00:00",
+  "partition_manifest_sha256": "b91429205d36f572e5108bd7a66771f001de89631b810ac26d111771ce8c3d27",
+  "hyperparameters": {
+    "alpha": 1.0,
+    "beta": 1.0,
+    "lambda_reg": 1.5
+  },
+  "retrieval_corpus": {
+    "partition": "TRAIN",
+    "memory_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "templates": [
+      "T1",
+      "T2"
+    ],
+    "case_count": 6
+  },
+  "test_cases": [
+    {
+      "case_id": "CASE-T7-01",
+      "template_id": "T7",
+      "memory_id": 10,
+      "query_text": "SELECT * FROM order_items WHERE quantity > 7 AND unit_price > 80.00;",
+      "canonical_template": "select * from order_items where quantity > ? and unit_price > ?"
+    },
+    {
+      "case_id": "CASE-T7-02",
+      "template_id": "T7",
+      "memory_id": 11,
+      "query_text": "SELECT * FROM order_items WHERE quantity > 8 AND unit_price > 85.00;",
+      "canonical_template": "select * from order_items where quantity > ? and unit_price > ?"
+    },
+    {
+      "case_id": "CASE-T7-03",
+      "template_id": "T7",
+      "memory_id": 12,
+      "query_text": "SELECT * FROM order_items WHERE quantity > 6 AND unit_price > 90.00;",
+      "canonical_template": "select * from order_items where quantity > ? and unit_price > ?"
+    },
+    {
+      "case_id": "CASE-T8-01",
+      "template_id": "T8",
+      "memory_id": 13,
+      "query_text": "SELECT * FROM orders WHERE customer_id = 42 AND status = 'COMPLETED';",
+      "canonical_template": "select * from orders where customer_id = ? and status = ?"
+    },
+    {
+      "case_id": "CASE-T8-02",
+      "template_id": "T8",
+      "memory_id": 14,
+      "query_text": "SELECT * FROM orders WHERE customer_id = 105 AND status = 'SHIPPED';",
+      "canonical_template": "select * from orders where customer_id = ? and status = ?"
+    }
+  ]
+}

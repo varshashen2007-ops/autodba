@@ -1,0 +1,1203 @@
+[
+  {
+    "case_id": "CASE-T1-01",
+    "template_id": "T1",
+    "exact_sql": "SELECT * FROM orders WHERE customer_id = 42;",
+    "target_table": "orders",
+    "role": "TRAIN",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_orders_customer_id",
+        "columns": [
+          "customer_id"
+        ],
+        "is_baseline": true,
+        "validation": {
+          "approval_id": "appr_d8a163f60cea",
+          "approved_by": "research_runner",
+          "approval_status": "approved",
+          "hypopg_validated": true
+        }
+      }
+    ],
+    "candidate_count": 1,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_orders_customer_id",
+    "selected_columns": [
+      "customer_id"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.2858,
+      "median_execution_time_ms": 0.2985,
+      "stddev_execution_time_ms": 0.0695,
+      "min_execution_time_ms": 0.175,
+      "max_execution_time_ms": 0.394,
+      "coefficient_of_variation": 0.2433,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 45,
+      "shared_read_blocks": 0,
+      "rows_returned": 10
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.0329,
+      "median_execution_time_ms": 0.032,
+      "stddev_execution_time_ms": 0.0076,
+      "min_execution_time_ms": 0.023,
+      "max_execution_time_ms": 0.043,
+      "coefficient_of_variation": 0.2308,
+      "scan_type": "Bitmap Heap Scan",
+      "index_used": "idx_autodba_orders_customer_id",
+      "shared_hit_blocks": 14,
+      "shared_read_blocks": 0,
+      "rows_returned": 10
+    },
+    "runtime_improvement_percent": 88.49,
+    "planner_cost_improvement_percent": 73.57,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 1,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T1-02",
+    "template_id": "T1",
+    "exact_sql": "SELECT * FROM orders WHERE customer_id = 105;",
+    "target_table": "orders",
+    "role": "TRAIN",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_orders_customer_id",
+        "columns": [
+          "customer_id"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 73.8,
+        "safety_eligible": true
+      }
+    ],
+    "candidate_count": 1,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_orders_customer_id",
+    "selected_columns": [
+      "customer_id"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.1648,
+      "median_execution_time_ms": 0.143,
+      "stddev_execution_time_ms": 0.0475,
+      "min_execution_time_ms": 0.137,
+      "max_execution_time_ms": 0.263,
+      "coefficient_of_variation": 0.288,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 45,
+      "shared_read_blocks": 0,
+      "rows_returned": 10
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.0324,
+      "median_execution_time_ms": 0.03,
+      "stddev_execution_time_ms": 0.0078,
+      "min_execution_time_ms": 0.024,
+      "max_execution_time_ms": 0.042,
+      "coefficient_of_variation": 0.2422,
+      "scan_type": "Bitmap Heap Scan",
+      "index_used": "idx_autodba_orders_customer_id",
+      "shared_hit_blocks": 14,
+      "shared_read_blocks": 0,
+      "rows_returned": 10
+    },
+    "runtime_improvement_percent": 80.34,
+    "planner_cost_improvement_percent": 73.57,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 2,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T1-03",
+    "template_id": "T1",
+    "exact_sql": "SELECT * FROM orders WHERE customer_id = 278;",
+    "target_table": "orders",
+    "role": "TRAIN",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_orders_customer_id",
+        "columns": [
+          "customer_id"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 73.8,
+        "safety_eligible": true
+      }
+    ],
+    "candidate_count": 1,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_orders_customer_id",
+    "selected_columns": [
+      "customer_id"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.1487,
+      "median_execution_time_ms": 0.1485,
+      "stddev_execution_time_ms": 0.0059,
+      "min_execution_time_ms": 0.141,
+      "max_execution_time_ms": 0.157,
+      "coefficient_of_variation": 0.0397,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 45,
+      "shared_read_blocks": 0,
+      "rows_returned": 10
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.0273,
+      "median_execution_time_ms": 0.0225,
+      "stddev_execution_time_ms": 0.0134,
+      "min_execution_time_ms": 0.02,
+      "max_execution_time_ms": 0.064,
+      "coefficient_of_variation": 0.4918,
+      "scan_type": "Bitmap Heap Scan",
+      "index_used": "idx_autodba_orders_customer_id",
+      "shared_hit_blocks": 14,
+      "shared_read_blocks": 0,
+      "rows_returned": 10
+    },
+    "runtime_improvement_percent": 81.64,
+    "planner_cost_improvement_percent": 73.57,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 3,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T2-01",
+    "template_id": "T2",
+    "exact_sql": "SELECT * FROM orders WHERE total_amount > 450.00;",
+    "target_table": "orders",
+    "role": "TRAIN",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_orders_total_amount",
+        "columns": [
+          "total_amount"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 49.13,
+        "safety_eligible": true
+      }
+    ],
+    "candidate_count": 1,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_orders_total_amount",
+    "selected_columns": [
+      "total_amount"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.3463,
+      "median_execution_time_ms": 0.341,
+      "stddev_execution_time_ms": 0.0243,
+      "min_execution_time_ms": 0.323,
+      "max_execution_time_ms": 0.409,
+      "coefficient_of_variation": 0.0701,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 45,
+      "shared_read_blocks": 0,
+      "rows_returned": 277
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.0957,
+      "median_execution_time_ms": 0.087,
+      "stddev_execution_time_ms": 0.0223,
+      "min_execution_time_ms": 0.084,
+      "max_execution_time_ms": 0.157,
+      "coefficient_of_variation": 0.2328,
+      "scan_type": "Bitmap Heap Scan",
+      "index_used": "idx_autodba_orders_total_amount",
+      "shared_hit_blocks": 51,
+      "shared_read_blocks": 0,
+      "rows_returned": 277
+    },
+    "runtime_improvement_percent": 72.37,
+    "planner_cost_improvement_percent": 48.9,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 4,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T2-02",
+    "template_id": "T2",
+    "exact_sql": "SELECT * FROM orders WHERE total_amount > 480.00;",
+    "target_table": "orders",
+    "role": "TRAIN",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_orders_total_amount",
+        "columns": [
+          "total_amount"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 92.51,
+        "safety_eligible": true
+      }
+    ],
+    "candidate_count": 1,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_orders_total_amount",
+    "selected_columns": [
+      "total_amount"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.3014,
+      "median_execution_time_ms": 0.2915,
+      "stddev_execution_time_ms": 0.0401,
+      "min_execution_time_ms": 0.261,
+      "max_execution_time_ms": 0.403,
+      "coefficient_of_variation": 0.133,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 45,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.0096,
+      "median_execution_time_ms": 0.008,
+      "stddev_execution_time_ms": 0.0025,
+      "min_execution_time_ms": 0.007,
+      "max_execution_time_ms": 0.014,
+      "coefficient_of_variation": 0.2608,
+      "scan_type": "Index Scan",
+      "index_used": "idx_autodba_orders_total_amount",
+      "shared_hit_blocks": 2,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "runtime_improvement_percent": 96.81,
+    "planner_cost_improvement_percent": 92.28,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 5,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T2-03",
+    "template_id": "T2",
+    "exact_sql": "SELECT * FROM orders WHERE total_amount > 420.00;",
+    "target_table": "orders",
+    "role": "TRAIN",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_orders_total_amount",
+        "columns": [
+          "total_amount"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 39.26,
+        "safety_eligible": true
+      }
+    ],
+    "candidate_count": 1,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_orders_total_amount",
+    "selected_columns": [
+      "total_amount"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.3238,
+      "median_execution_time_ms": 0.321,
+      "stddev_execution_time_ms": 0.0117,
+      "min_execution_time_ms": 0.306,
+      "max_execution_time_ms": 0.342,
+      "coefficient_of_variation": 0.0362,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 45,
+      "shared_read_blocks": 0,
+      "rows_returned": 609
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.114,
+      "median_execution_time_ms": 0.106,
+      "stddev_execution_time_ms": 0.0264,
+      "min_execution_time_ms": 0.093,
+      "max_execution_time_ms": 0.18,
+      "coefficient_of_variation": 0.2315,
+      "scan_type": "Bitmap Heap Scan",
+      "index_used": "idx_autodba_orders_total_amount",
+      "shared_hit_blocks": 53,
+      "shared_read_blocks": 0,
+      "rows_returned": 609
+    },
+    "runtime_improvement_percent": 64.79,
+    "planner_cost_improvement_percent": 39.02,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 6,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T3-01",
+    "template_id": "T3",
+    "exact_sql": "SELECT * FROM orders WHERE customer_id = 42 AND total_amount > 100.00;",
+    "target_table": "orders",
+    "role": "TRAIN",
+    "status": "EXCLUDED",
+    "candidate_pool": [],
+    "candidate_count": 0,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": false,
+    "safety_level": null,
+    "safety_blocking_reasons": [
+      "Selected candidate 'cand_orders_total_amount_customer_id' is not eligible for approval: Recommendation status is 'rejected'. Only VALIDATED recommendations are eligible for human approval.; HypoPG counterfactual validation was not confirmed for this index candidate.; Planner cost improvement (0.0%) is below the minimum threshold of 5.0%.; Recommendation confidence is 'medium'. Only HIGH confidence recommendations are eligible for approval."
+    ],
+    "selected_physical_index": null,
+    "selected_columns": [],
+    "before_benchmark": {},
+    "after_benchmark": {},
+    "runtime_improvement_percent": null,
+    "planner_cost_improvement_percent": null,
+    "physical_verification_passed": false,
+    "persisted_memory_id": null,
+    "provenance": null,
+    "verification_state": null,
+    "cleanup_success": true,
+    "exclusion_reason": "Selected candidate 'cand_orders_total_amount_customer_id' is not eligible for approval: Recommendation status is 'rejected'. Only VALIDATED recommendations are eligible for human approval.; HypoPG counterfactual validation was not confirmed for this index candidate.; Planner cost improvement (0.0%) is below the minimum threshold of 5.0%.; Recommendation confidence is 'medium'. Only HIGH confidence recommendations are eligible for approval."
+  },
+  {
+    "case_id": "CASE-T3-02",
+    "template_id": "T3",
+    "exact_sql": "SELECT * FROM orders WHERE customer_id = 105 AND total_amount > 150.00;",
+    "target_table": "orders",
+    "role": "TRAIN",
+    "status": "EXCLUDED",
+    "candidate_pool": [],
+    "candidate_count": 0,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": false,
+    "safety_level": null,
+    "safety_blocking_reasons": [
+      "Selected candidate 'cand_orders_total_amount_customer_id' is not eligible for approval: Recommendation status is 'rejected'. Only VALIDATED recommendations are eligible for human approval.; HypoPG counterfactual validation was not confirmed for this index candidate.; Planner cost improvement (0.0%) is below the minimum threshold of 5.0%.; Recommendation confidence is 'medium'. Only HIGH confidence recommendations are eligible for approval."
+    ],
+    "selected_physical_index": null,
+    "selected_columns": [],
+    "before_benchmark": {},
+    "after_benchmark": {},
+    "runtime_improvement_percent": null,
+    "planner_cost_improvement_percent": null,
+    "physical_verification_passed": false,
+    "persisted_memory_id": null,
+    "provenance": null,
+    "verification_state": null,
+    "cleanup_success": true,
+    "exclusion_reason": "Selected candidate 'cand_orders_total_amount_customer_id' is not eligible for approval: Recommendation status is 'rejected'. Only VALIDATED recommendations are eligible for human approval.; HypoPG counterfactual validation was not confirmed for this index candidate.; Planner cost improvement (0.0%) is below the minimum threshold of 5.0%.; Recommendation confidence is 'medium'. Only HIGH confidence recommendations are eligible for approval."
+  },
+  {
+    "case_id": "CASE-T3-03",
+    "template_id": "T3",
+    "exact_sql": "SELECT * FROM orders WHERE customer_id = 278 AND total_amount > 200.00;",
+    "target_table": "orders",
+    "role": "TRAIN",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_orders_total_amount_customer_id",
+        "columns": [
+          "total_amount",
+          "customer_id"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 9.96,
+        "safety_eligible": true
+      },
+      {
+        "candidate_id": "cand_orders_total_amount",
+        "columns": [
+          "total_amount"
+        ],
+        "is_baseline": false,
+        "validation_verdict": "no_improvement",
+        "cost_improvement_percent": 0.0,
+        "safety_eligible": false
+      },
+      {
+        "candidate_id": "cand_orders_customer_id",
+        "columns": [
+          "customer_id"
+        ],
+        "is_baseline": false,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 76.52,
+        "safety_eligible": true
+      }
+    ],
+    "candidate_count": 3,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_orders_total_amount_customer_id",
+    "selected_columns": [
+      "total_amount",
+      "customer_id"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.3175,
+      "median_execution_time_ms": 0.308,
+      "stddev_execution_time_ms": 0.0212,
+      "min_execution_time_ms": 0.3,
+      "max_execution_time_ms": 0.363,
+      "coefficient_of_variation": 0.0667,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 45,
+      "shared_read_blocks": 0,
+      "rows_returned": 7
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.1163,
+      "median_execution_time_ms": 0.108,
+      "stddev_execution_time_ms": 0.0214,
+      "min_execution_time_ms": 0.105,
+      "max_execution_time_ms": 0.174,
+      "coefficient_of_variation": 0.1836,
+      "scan_type": "Bitmap Heap Scan",
+      "index_used": "idx_autodba_orders_total_amount_customer_id",
+      "shared_hit_blocks": 35,
+      "shared_read_blocks": 0,
+      "rows_returned": 7
+    },
+    "runtime_improvement_percent": 63.37,
+    "planner_cost_improvement_percent": 13.08,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 7,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T4-01",
+    "template_id": "T4",
+    "exact_sql": "SELECT * FROM orders WHERE status = 'CANCELLED';",
+    "target_table": "orders",
+    "role": "TRAIN",
+    "status": "EXCLUDED",
+    "candidate_pool": [],
+    "candidate_count": 0,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": false,
+    "safety_level": null,
+    "safety_blocking_reasons": [
+      "No candidate evaluations generated for query: SELECT * FROM orders WHERE status = 'CANCELLED';"
+    ],
+    "selected_physical_index": null,
+    "selected_columns": [],
+    "before_benchmark": {},
+    "after_benchmark": {},
+    "runtime_improvement_percent": null,
+    "planner_cost_improvement_percent": null,
+    "physical_verification_passed": false,
+    "persisted_memory_id": null,
+    "provenance": null,
+    "verification_state": null,
+    "cleanup_success": true,
+    "exclusion_reason": "No candidate evaluations generated for query: SELECT * FROM orders WHERE status = 'CANCELLED';"
+  },
+  {
+    "case_id": "CASE-T4-02",
+    "template_id": "T4",
+    "exact_sql": "SELECT * FROM orders WHERE status = 'PENDING';",
+    "target_table": "orders",
+    "role": "TRAIN",
+    "status": "EXCLUDED",
+    "candidate_pool": [],
+    "candidate_count": 0,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": false,
+    "safety_level": null,
+    "safety_blocking_reasons": [
+      "No candidate evaluations generated for query: SELECT * FROM orders WHERE status = 'PENDING';"
+    ],
+    "selected_physical_index": null,
+    "selected_columns": [],
+    "before_benchmark": {},
+    "after_benchmark": {},
+    "runtime_improvement_percent": null,
+    "planner_cost_improvement_percent": null,
+    "physical_verification_passed": false,
+    "persisted_memory_id": null,
+    "provenance": null,
+    "verification_state": null,
+    "cleanup_success": true,
+    "exclusion_reason": "No candidate evaluations generated for query: SELECT * FROM orders WHERE status = 'PENDING';"
+  },
+  {
+    "case_id": "CASE-T5-01",
+    "template_id": "T5",
+    "exact_sql": "SELECT * FROM order_items WHERE quantity > 8;",
+    "target_table": "order_items",
+    "role": "TRAIN",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_order_items_quantity",
+        "columns": [
+          "quantity"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 97.48,
+        "safety_eligible": true
+      }
+    ],
+    "candidate_count": 1,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_order_items_quantity",
+    "selected_columns": [
+      "quantity"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.4732,
+      "median_execution_time_ms": 0.4665,
+      "stddev_execution_time_ms": 0.0278,
+      "min_execution_time_ms": 0.438,
+      "max_execution_time_ms": 0.515,
+      "coefficient_of_variation": 0.0587,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 125,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.0139,
+      "median_execution_time_ms": 0.012,
+      "stddev_execution_time_ms": 0.0038,
+      "min_execution_time_ms": 0.01,
+      "max_execution_time_ms": 0.022,
+      "coefficient_of_variation": 0.2701,
+      "scan_type": "Index Scan",
+      "index_used": "idx_autodba_order_items_quantity",
+      "shared_hit_blocks": 2,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "runtime_improvement_percent": 97.06,
+    "planner_cost_improvement_percent": 97.4,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 8,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T5-02",
+    "template_id": "T5",
+    "exact_sql": "SELECT * FROM order_items WHERE quantity > 9;",
+    "target_table": "order_items",
+    "role": "TRAIN",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_order_items_quantity",
+        "columns": [
+          "quantity"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 97.48,
+        "safety_eligible": true
+      }
+    ],
+    "candidate_count": 1,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_order_items_quantity",
+    "selected_columns": [
+      "quantity"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.616,
+      "median_execution_time_ms": 0.518,
+      "stddev_execution_time_ms": 0.1918,
+      "min_execution_time_ms": 0.458,
+      "max_execution_time_ms": 0.963,
+      "coefficient_of_variation": 0.3113,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 125,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.0308,
+      "median_execution_time_ms": 0.0285,
+      "stddev_execution_time_ms": 0.0102,
+      "min_execution_time_ms": 0.017,
+      "max_execution_time_ms": 0.05,
+      "coefficient_of_variation": 0.331,
+      "scan_type": "Index Scan",
+      "index_used": "idx_autodba_order_items_quantity",
+      "shared_hit_blocks": 2,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "runtime_improvement_percent": 95.0,
+    "planner_cost_improvement_percent": 97.4,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 9,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T6-01",
+    "template_id": "T6",
+    "exact_sql": "SELECT * FROM order_items WHERE unit_price > 95.00;",
+    "target_table": "order_items",
+    "role": "TRAIN",
+    "status": "EXCLUDED",
+    "candidate_pool": [],
+    "candidate_count": 0,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": false,
+    "safety_level": null,
+    "safety_blocking_reasons": [
+      "Selected candidate 'cand_order_items_unit_price' is not eligible for approval: Recommendation status is 'rejected'. Only VALIDATED recommendations are eligible for human approval.; HypoPG counterfactual validation was not confirmed for this index candidate.; Planner cost improvement (0.0%) is below the minimum threshold of 5.0%.; Recommendation confidence is 'medium'. Only HIGH confidence recommendations are eligible for approval."
+    ],
+    "selected_physical_index": null,
+    "selected_columns": [],
+    "before_benchmark": {},
+    "after_benchmark": {},
+    "runtime_improvement_percent": null,
+    "planner_cost_improvement_percent": null,
+    "physical_verification_passed": false,
+    "persisted_memory_id": null,
+    "provenance": null,
+    "verification_state": null,
+    "cleanup_success": true,
+    "exclusion_reason": "Selected candidate 'cand_order_items_unit_price' is not eligible for approval: Recommendation status is 'rejected'. Only VALIDATED recommendations are eligible for human approval.; HypoPG counterfactual validation was not confirmed for this index candidate.; Planner cost improvement (0.0%) is below the minimum threshold of 5.0%.; Recommendation confidence is 'medium'. Only HIGH confidence recommendations are eligible for approval."
+  },
+  {
+    "case_id": "CASE-T6-02",
+    "template_id": "T6",
+    "exact_sql": "SELECT * FROM order_items WHERE unit_price > 90.00;",
+    "target_table": "order_items",
+    "role": "TRAIN",
+    "status": "EXCLUDED",
+    "candidate_pool": [],
+    "candidate_count": 0,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": false,
+    "safety_level": null,
+    "safety_blocking_reasons": [
+      "Selected candidate 'cand_order_items_unit_price' is not eligible for approval: Recommendation status is 'rejected'. Only VALIDATED recommendations are eligible for human approval.; HypoPG counterfactual validation was not confirmed for this index candidate.; Planner cost improvement (0.0%) is below the minimum threshold of 5.0%.; Recommendation confidence is 'medium'. Only HIGH confidence recommendations are eligible for approval."
+    ],
+    "selected_physical_index": null,
+    "selected_columns": [],
+    "before_benchmark": {},
+    "after_benchmark": {},
+    "runtime_improvement_percent": null,
+    "planner_cost_improvement_percent": null,
+    "physical_verification_passed": false,
+    "persisted_memory_id": null,
+    "provenance": null,
+    "verification_state": null,
+    "cleanup_success": true,
+    "exclusion_reason": "Selected candidate 'cand_order_items_unit_price' is not eligible for approval: Recommendation status is 'rejected'. Only VALIDATED recommendations are eligible for human approval.; HypoPG counterfactual validation was not confirmed for this index candidate.; Planner cost improvement (0.0%) is below the minimum threshold of 5.0%.; Recommendation confidence is 'medium'. Only HIGH confidence recommendations are eligible for approval."
+  },
+  {
+    "case_id": "CASE-T7-01",
+    "template_id": "T7",
+    "exact_sql": "SELECT * FROM order_items WHERE quantity > 7 AND unit_price > 80.00;",
+    "target_table": "order_items",
+    "role": "TEST",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_order_items_quantity_unit_price",
+        "columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 97.72,
+        "safety_eligible": true
+      },
+      {
+        "candidate_id": "cand_order_items_quantity",
+        "columns": [
+          "quantity"
+        ],
+        "is_baseline": false,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 97.74,
+        "safety_eligible": true
+      },
+      {
+        "candidate_id": "cand_order_items_unit_price",
+        "columns": [
+          "unit_price"
+        ],
+        "is_baseline": false,
+        "validation_verdict": "no_improvement",
+        "cost_improvement_percent": 0.0,
+        "safety_eligible": false
+      }
+    ],
+    "candidate_count": 3,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_order_items_quantity_unit_price",
+    "selected_columns": [
+      "quantity",
+      "unit_price"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.6742,
+      "median_execution_time_ms": 0.6635,
+      "stddev_execution_time_ms": 0.0317,
+      "min_execution_time_ms": 0.629,
+      "max_execution_time_ms": 0.719,
+      "coefficient_of_variation": 0.0471,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 125,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.0247,
+      "median_execution_time_ms": 0.021,
+      "stddev_execution_time_ms": 0.0152,
+      "min_execution_time_ms": 0.015,
+      "max_execution_time_ms": 0.067,
+      "coefficient_of_variation": 0.614,
+      "scan_type": "Index Scan",
+      "index_used": "idx_autodba_order_items_quantity_unit_price",
+      "shared_hit_blocks": 2,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "runtime_improvement_percent": 96.34,
+    "planner_cost_improvement_percent": 97.65,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 10,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T7-02",
+    "template_id": "T7",
+    "exact_sql": "SELECT * FROM order_items WHERE quantity > 8 AND unit_price > 85.00;",
+    "target_table": "order_items",
+    "role": "TEST",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_order_items_quantity_unit_price",
+        "columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 97.72,
+        "safety_eligible": true
+      },
+      {
+        "candidate_id": "cand_order_items_quantity",
+        "columns": [
+          "quantity"
+        ],
+        "is_baseline": false,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 97.74,
+        "safety_eligible": true
+      },
+      {
+        "candidate_id": "cand_order_items_unit_price",
+        "columns": [
+          "unit_price"
+        ],
+        "is_baseline": false,
+        "validation_verdict": "no_improvement",
+        "cost_improvement_percent": 0.0,
+        "safety_eligible": false
+      }
+    ],
+    "candidate_count": 3,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_order_items_quantity_unit_price",
+    "selected_columns": [
+      "quantity",
+      "unit_price"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.9013,
+      "median_execution_time_ms": 0.803,
+      "stddev_execution_time_ms": 0.2223,
+      "min_execution_time_ms": 0.717,
+      "max_execution_time_ms": 1.365,
+      "coefficient_of_variation": 0.2467,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 125,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.0194,
+      "median_execution_time_ms": 0.0175,
+      "stddev_execution_time_ms": 0.0042,
+      "min_execution_time_ms": 0.016,
+      "max_execution_time_ms": 0.027,
+      "coefficient_of_variation": 0.2176,
+      "scan_type": "Index Scan",
+      "index_used": "idx_autodba_order_items_quantity_unit_price",
+      "shared_hit_blocks": 2,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "runtime_improvement_percent": 97.85,
+    "planner_cost_improvement_percent": 97.65,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 11,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T7-03",
+    "template_id": "T7",
+    "exact_sql": "SELECT * FROM order_items WHERE quantity > 6 AND unit_price > 90.00;",
+    "target_table": "order_items",
+    "role": "TEST",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_order_items_quantity_unit_price",
+        "columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 97.72,
+        "safety_eligible": true
+      },
+      {
+        "candidate_id": "cand_order_items_quantity",
+        "columns": [
+          "quantity"
+        ],
+        "is_baseline": false,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 97.74,
+        "safety_eligible": true
+      },
+      {
+        "candidate_id": "cand_order_items_unit_price",
+        "columns": [
+          "unit_price"
+        ],
+        "is_baseline": false,
+        "validation_verdict": "no_improvement",
+        "cost_improvement_percent": 0.0,
+        "safety_eligible": false
+      }
+    ],
+    "candidate_count": 3,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_order_items_quantity_unit_price",
+    "selected_columns": [
+      "quantity",
+      "unit_price"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.7651,
+      "median_execution_time_ms": 0.716,
+      "stddev_execution_time_ms": 0.1299,
+      "min_execution_time_ms": 0.673,
+      "max_execution_time_ms": 1.115,
+      "coefficient_of_variation": 0.1698,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 125,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.031,
+      "median_execution_time_ms": 0.0315,
+      "stddev_execution_time_ms": 0.0075,
+      "min_execution_time_ms": 0.02,
+      "max_execution_time_ms": 0.043,
+      "coefficient_of_variation": 0.2404,
+      "scan_type": "Index Scan",
+      "index_used": "idx_autodba_order_items_quantity_unit_price",
+      "shared_hit_blocks": 2,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "runtime_improvement_percent": 95.95,
+    "planner_cost_improvement_percent": 97.65,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 12,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T8-01",
+    "template_id": "T8",
+    "exact_sql": "SELECT * FROM orders WHERE customer_id = 42 AND status = 'COMPLETED';",
+    "target_table": "orders",
+    "role": "TEST",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_orders_customer_id",
+        "columns": [
+          "customer_id"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 76.52,
+        "safety_eligible": true
+      }
+    ],
+    "candidate_count": 1,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_orders_customer_id",
+    "selected_columns": [
+      "customer_id"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.312,
+      "median_execution_time_ms": 0.2755,
+      "stddev_execution_time_ms": 0.0624,
+      "min_execution_time_ms": 0.269,
+      "max_execution_time_ms": 0.432,
+      "coefficient_of_variation": 0.2001,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 45,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.0406,
+      "median_execution_time_ms": 0.0385,
+      "stddev_execution_time_ms": 0.0106,
+      "min_execution_time_ms": 0.03,
+      "max_execution_time_ms": 0.065,
+      "coefficient_of_variation": 0.2607,
+      "scan_type": "Bitmap Heap Scan",
+      "index_used": "idx_autodba_orders_customer_id",
+      "shared_hit_blocks": 14,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "runtime_improvement_percent": 86.99,
+    "planner_cost_improvement_percent": 76.31,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 13,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  },
+  {
+    "case_id": "CASE-T8-02",
+    "template_id": "T8",
+    "exact_sql": "SELECT * FROM orders WHERE customer_id = 105 AND status = 'SHIPPED';",
+    "target_table": "orders",
+    "role": "TEST",
+    "status": "SUCCESS",
+    "candidate_pool": [
+      {
+        "candidate_id": "cand_orders_customer_id",
+        "columns": [
+          "customer_id"
+        ],
+        "is_baseline": true,
+        "validation_verdict": "validated",
+        "cost_improvement_percent": 76.52,
+        "safety_eligible": true
+      }
+    ],
+    "candidate_count": 1,
+    "hypopg_verdict": null,
+    "hypopg_cost_improvement_percent": null,
+    "hypopg_original_cost": null,
+    "hypopg_hypothetical_cost": null,
+    "safety_eligible": true,
+    "safety_level": "LOW",
+    "safety_blocking_reasons": [],
+    "selected_physical_index": "idx_autodba_orders_customer_id",
+    "selected_columns": [
+      "customer_id"
+    ],
+    "before_benchmark": {
+      "mean_execution_time_ms": 0.2961,
+      "median_execution_time_ms": 0.2735,
+      "stddev_execution_time_ms": 0.0685,
+      "min_execution_time_ms": 0.267,
+      "max_execution_time_ms": 0.49,
+      "coefficient_of_variation": 0.2315,
+      "scan_type": "Seq Scan",
+      "index_used": null,
+      "shared_hit_blocks": 45,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "after_benchmark": {
+      "mean_execution_time_ms": 0.0713,
+      "median_execution_time_ms": 0.071,
+      "stddev_execution_time_ms": 0.0205,
+      "min_execution_time_ms": 0.043,
+      "max_execution_time_ms": 0.121,
+      "coefficient_of_variation": 0.2877,
+      "scan_type": "Bitmap Heap Scan",
+      "index_used": "idx_autodba_orders_customer_id",
+      "shared_hit_blocks": 14,
+      "shared_read_blocks": 0,
+      "rows_returned": 0
+    },
+    "runtime_improvement_percent": 75.92,
+    "planner_cost_improvement_percent": 76.31,
+    "physical_verification_passed": true,
+    "persisted_memory_id": 14,
+    "provenance": "measured",
+    "verification_state": "verified_measured",
+    "cleanup_success": true,
+    "exclusion_reason": null
+  }
+]

@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.db.database import SessionLocal
 from app.services.memory_service import MemoryService
-from app.schemas.optimization import OptimizationOutcome
+from app.schemas.optimization import CaseProvenance, OptimizationOutcome, OutcomeVerificationState
 
 
 SEED_CASES = [
@@ -117,7 +117,12 @@ def main() -> None:
         service = MemoryService(db)
 
         for case in SEED_CASES:
-            service.create_memory(**case)
+            service.create_memory(
+                **case,
+                provenance=CaseProvenance.SEEDED,
+                is_verified=False,
+                verification_state=OutcomeVerificationState.SYNTHETIC,
+            )
 
         print(f"Seeded {len(SEED_CASES)} historical optimization memories.")
     finally:

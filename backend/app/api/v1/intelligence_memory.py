@@ -4,11 +4,14 @@ from sqlalchemy.orm import Session
 
 from app.db.database import get_db
 from app.schemas.optimization import (
+    CaseProvenance,
     MemoryListItem,
     MemorySearchRequest,
     MemorySearchResponse,
     OptimizationMemory,
+    OptimizationOutcome,
     OptimizationOutcomeRecord,
+    OutcomeVerificationState,
 )
 from app.services.memory_service import MemoryService
 
@@ -30,6 +33,8 @@ def record_optimization_outcome(
         "index_usage_changed": request.index_usage_changed,
     }
 
+    # Manually recorded memories are always unverified — no physical benchmark
+    # was run through the closed-loop pipeline.
     memory = service.create_memory(
         incident_type=request.incident_type,
         query_text=request.query_text,
@@ -39,6 +44,9 @@ def record_optimization_outcome(
         benchmark=benchmark,
         outcome=request.outcome,
         outcome_summary=request.outcome_summary,
+        provenance=CaseProvenance.UNVERIFIED,
+        is_verified=False,
+        verification_state=OutcomeVerificationState.UNVERIFIED,
     )
 
     return memory

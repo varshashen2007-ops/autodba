@@ -8,10 +8,13 @@ from sqlalchemy.orm import Session
 
 from app.db.models import OptimizationMemoryModel
 from app.schemas.optimization import (
+    CaseProvenance,
     MemoryListItem,
+    MemorySearchRequest,
     MemorySearchResponse,
     OptimizationMemory,
     OptimizationOutcome,
+    OutcomeVerificationState,
     SimilarCase,
 )
 from app.services.embedding_service import EmbeddingService
@@ -36,6 +39,9 @@ class MemoryService:
         outcome: Optional[OptimizationOutcome] = None,
         outcome_summary: Optional[str] = None,
         query_fingerprint: Optional[str] = None,
+        provenance: CaseProvenance = CaseProvenance.UNVERIFIED,
+        is_verified: bool = False,
+        verification_state: Optional[OutcomeVerificationState] = None,
     ) -> OptimizationMemory:
         """Create and persist a historical optimization memory."""
 
@@ -54,6 +60,20 @@ class MemoryService:
             outcome = derived_outcome
         elif outcome is None:
             outcome = derived_outcome
+
+        # Strict provenance and verification invariants:
+        # A record may ONLY have is_verified=True and verification_state=VERIFIED_MEASURED
+        # when provenance is MEASURED and is_verified is explicitly True.
+        if provenance == CaseProvenance.MEASURED and is_verified:
+            is_verified = True
+            verification_state = OutcomeVerificationState.VERIFIED_MEASURED
+        elif provenance in (CaseProvenance.SEEDED, CaseProvenance.SYNTHETIC):
+            is_verified = False
+            verification_state = OutcomeVerificationState.SYNTHETIC
+        else:
+            provenance = CaseProvenance.UNVERIFIED
+            is_verified = False
+            verification_state = OutcomeVerificationState.UNVERIFIED
 
         embedding_text = self._build_embedding_text(
             incident_type=incident_type,
@@ -75,6 +95,9 @@ class MemoryService:
             benchmark=benchmark,
             outcome=outcome.value,
             outcome_summary=outcome_summary,
+            provenance=provenance.value,
+            is_verified=is_verified,
+            verification_state=verification_state.value,
             embedding=embedding,
         )
 
@@ -119,6 +142,9 @@ class MemoryService:
                 query_text=model.query_text,
                 outcome=OptimizationOutcome(model.outcome),
                 outcome_summary=model.outcome_summary,
+                provenance=CaseProvenance(getattr(model, "provenance", "unverified") or "unverified"),
+                is_verified=bool(getattr(model, "is_verified", False)),
+                verification_state=OutcomeVerificationState(getattr(model, "verification_state", "unverified") or "unverified"),
                 created_at=model.created_at,
             )
             for model in models
@@ -131,6 +157,8 @@ class MemoryService:
         incident_type: Optional[str] = None,
         limit: int = 5,
         similarity_threshold: float = 0.0,
+        verified_only: bool = False,
+        provenance: Optional[CaseProvenance] = None,
     ) -> List[SimilarCase]:
         """
         Search historical memories using cosine similarity.
@@ -138,6 +166,8 @@ class MemoryService:
         Incident type is a ranking preference rather than a hard filter.
         This allows semantically similar cases to be retrieved even when
         the current deterministic incident type is unknown.
+
+        Supports filtering by verified_only (measured outcomes) or provenance.
         """
 
         query_embedding = self.embedding_service.embed(query)
@@ -148,6 +178,15 @@ class MemoryService:
         scored: List[tuple[float, OptimizationMemoryModel]] = []
 
         for model in models:
+            model_verified = bool(getattr(model, "is_verified", False))
+            model_prov = getattr(model, "provenance", "unverified") or "unverified"
+
+            if verified_only and not model_verified:
+                continue
+
+            if provenance is not None and model_prov != provenance.value:
+                continue
+
             similarity = self.embedding_service.cosine_similarity(
                 query_embedding,
                 model.embedding,
@@ -177,7 +216,7 @@ class MemoryService:
 
     def search(
         self,
-        request,
+        request: MemorySearchRequest,
     ) -> MemorySearchResponse:
         """Execute a semantic memory search from a request model."""
 
@@ -186,6 +225,8 @@ class MemoryService:
             incident_type=request.incident_type,
             limit=request.limit,
             similarity_threshold=request.similarity_threshold,
+            verified_only=request.verified_only,
+            provenance=request.provenance,
         )
 
         return MemorySearchResponse(
@@ -194,7 +235,6 @@ class MemoryService:
             total=len(results),
         )
 
-    @staticmethod
     @staticmethod
     def determine_outcome(
         *,
@@ -263,6 +303,8 @@ class MemoryService:
     def _to_memory(
         model: OptimizationMemoryModel,
     ) -> OptimizationMemory:
+        prov = CaseProvenance(getattr(model, "provenance", "unverified") or "unverified")
+        ver_state = OutcomeVerificationState(getattr(model, "verification_state", "unverified") or "unverified")
         return OptimizationMemory(
             id=model.id,
             incident_type=model.incident_type,
@@ -274,6 +316,9 @@ class MemoryService:
             benchmark=model.benchmark,
             outcome=OptimizationOutcome(model.outcome),
             outcome_summary=model.outcome_summary,
+            provenance=prov,
+            is_verified=bool(getattr(model, "is_verified", False)),
+            verification_state=ver_state,
             embedding=model.embedding,
             created_at=model.created_at,
             updated_at=model.updated_at,
@@ -285,12 +330,17 @@ class MemoryService:
         model: OptimizationMemoryModel,
         similarity: float,
     ) -> SimilarCase:
+        prov = CaseProvenance(getattr(model, "provenance", "unverified") or "unverified")
+        ver_state = OutcomeVerificationState(getattr(model, "verification_state", "unverified") or "unverified")
         return SimilarCase(
             memory_id=model.id,
             incident_type=model.incident_type,
             query_text=model.query_text,
             outcome=OptimizationOutcome(model.outcome),
             outcome_summary=model.outcome_summary,
+            provenance=prov,
+            is_verified=bool(getattr(model, "is_verified", False)),
+            verification_state=ver_state,
             similarity=max(0.0, min(float(similarity), 1.0)),
             diagnosis=model.diagnosis,
             recommendation=model.recommendation,

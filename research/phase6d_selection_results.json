@@ -1,0 +1,596 @@
+[
+  {
+    "case_id": "CASE-T7-01",
+    "template_id": "T7",
+    "memory_id": 10,
+    "query_text": "SELECT * FROM order_items WHERE quantity > 7 AND unit_price > 80.00;",
+    "target_table": "order_items",
+    "eligible_candidate_count": 2,
+    "eligible_candidates": [
+      {
+        "candidate_id": "cand_order_items_quantity_unit_price",
+        "columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "is_baseline": true,
+        "canonical_key": "order_items:btree:quantity,unit_price",
+        "hypopg_cost_improvement": 97.72
+      },
+      {
+        "candidate_id": "cand_order_items_quantity",
+        "columns": [
+          "quantity"
+        ],
+        "is_baseline": false,
+        "canonical_key": "order_items:btree:quantity",
+        "hypopg_cost_improvement": 97.74
+      }
+    ],
+    "selections": {
+      "policy_a": {
+        "policy": "planner_only",
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_order_items_quantity_unit_price",
+            "canonical_key": "(quantity,unit_price)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          },
+          {
+            "candidate_id": "cand_order_items_quantity",
+            "canonical_key": "(quantity)",
+            "is_baseline": false,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 0.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_b": {
+        "policy": "similarity",
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "fallback_used": true,
+        "fallback_reason": "No historical cases in training corpus matched candidate index definitions.",
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_order_items_quantity_unit_price",
+            "canonical_key": "(quantity,unit_price)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          },
+          {
+            "candidate_id": "cand_order_items_quantity",
+            "canonical_key": "(quantity)",
+            "is_baseline": false,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 0.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_c": {
+        "policy": "outcome_aware",
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "fallback_used": true,
+        "fallback_reason": "No verified measured historical cases matched candidate index definitions.",
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_order_items_quantity_unit_price",
+            "canonical_key": "(quantity,unit_price)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          },
+          {
+            "candidate_id": "cand_order_items_quantity",
+            "canonical_key": "(quantity)",
+            "is_baseline": false,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 0.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      }
+    }
+  },
+  {
+    "case_id": "CASE-T7-02",
+    "template_id": "T7",
+    "memory_id": 11,
+    "query_text": "SELECT * FROM order_items WHERE quantity > 8 AND unit_price > 85.00;",
+    "target_table": "order_items",
+    "eligible_candidate_count": 2,
+    "eligible_candidates": [
+      {
+        "candidate_id": "cand_order_items_quantity_unit_price",
+        "columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "is_baseline": true,
+        "canonical_key": "order_items:btree:quantity,unit_price",
+        "hypopg_cost_improvement": 97.72
+      },
+      {
+        "candidate_id": "cand_order_items_quantity",
+        "columns": [
+          "quantity"
+        ],
+        "is_baseline": false,
+        "canonical_key": "order_items:btree:quantity",
+        "hypopg_cost_improvement": 97.74
+      }
+    ],
+    "selections": {
+      "policy_a": {
+        "policy": "planner_only",
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_order_items_quantity_unit_price",
+            "canonical_key": "(quantity,unit_price)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          },
+          {
+            "candidate_id": "cand_order_items_quantity",
+            "canonical_key": "(quantity)",
+            "is_baseline": false,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 0.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_b": {
+        "policy": "similarity",
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "fallback_used": true,
+        "fallback_reason": "No historical cases in training corpus matched candidate index definitions.",
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_order_items_quantity_unit_price",
+            "canonical_key": "(quantity,unit_price)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          },
+          {
+            "candidate_id": "cand_order_items_quantity",
+            "canonical_key": "(quantity)",
+            "is_baseline": false,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 0.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_c": {
+        "policy": "outcome_aware",
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "fallback_used": true,
+        "fallback_reason": "No verified measured historical cases matched candidate index definitions.",
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_order_items_quantity_unit_price",
+            "canonical_key": "(quantity,unit_price)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          },
+          {
+            "candidate_id": "cand_order_items_quantity",
+            "canonical_key": "(quantity)",
+            "is_baseline": false,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 0.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      }
+    }
+  },
+  {
+    "case_id": "CASE-T7-03",
+    "template_id": "T7",
+    "memory_id": 12,
+    "query_text": "SELECT * FROM order_items WHERE quantity > 6 AND unit_price > 90.00;",
+    "target_table": "order_items",
+    "eligible_candidate_count": 2,
+    "eligible_candidates": [
+      {
+        "candidate_id": "cand_order_items_quantity_unit_price",
+        "columns": [
+          "quantity",
+          "unit_price"
+        ],
+        "is_baseline": true,
+        "canonical_key": "order_items:btree:quantity,unit_price",
+        "hypopg_cost_improvement": 97.72
+      },
+      {
+        "candidate_id": "cand_order_items_quantity",
+        "columns": [
+          "quantity"
+        ],
+        "is_baseline": false,
+        "canonical_key": "order_items:btree:quantity",
+        "hypopg_cost_improvement": 97.74
+      }
+    ],
+    "selections": {
+      "policy_a": {
+        "policy": "planner_only",
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_order_items_quantity_unit_price",
+            "canonical_key": "(quantity,unit_price)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          },
+          {
+            "candidate_id": "cand_order_items_quantity",
+            "canonical_key": "(quantity)",
+            "is_baseline": false,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 0.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_b": {
+        "policy": "similarity",
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "fallback_used": true,
+        "fallback_reason": "No historical cases in training corpus matched candidate index definitions.",
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_order_items_quantity_unit_price",
+            "canonical_key": "(quantity,unit_price)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          },
+          {
+            "candidate_id": "cand_order_items_quantity",
+            "canonical_key": "(quantity)",
+            "is_baseline": false,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 0.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_c": {
+        "policy": "outcome_aware",
+        "selected_candidate_id": "cand_order_items_quantity_unit_price",
+        "fallback_used": true,
+        "fallback_reason": "No verified measured historical cases matched candidate index definitions.",
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_order_items_quantity_unit_price",
+            "canonical_key": "(quantity,unit_price)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          },
+          {
+            "candidate_id": "cand_order_items_quantity",
+            "canonical_key": "(quantity)",
+            "is_baseline": false,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 0.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      }
+    }
+  },
+  {
+    "case_id": "CASE-T8-01",
+    "template_id": "T8",
+    "memory_id": 13,
+    "query_text": "SELECT * FROM orders WHERE customer_id = 42 AND status = 'COMPLETED';",
+    "target_table": "orders",
+    "eligible_candidate_count": 1,
+    "eligible_candidates": [
+      {
+        "candidate_id": "cand_orders_customer_id",
+        "columns": [
+          "customer_id"
+        ],
+        "is_baseline": true,
+        "canonical_key": "orders:btree:customer_id",
+        "hypopg_cost_improvement": 76.52
+      }
+    ],
+    "selections": {
+      "policy_a": {
+        "policy": "planner_only",
+        "selected_candidate_id": "cand_orders_customer_id",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_customer_id",
+            "canonical_key": "(customer_id)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_b": {
+        "policy": "similarity",
+        "selected_candidate_id": "cand_orders_customer_id",
+        "fallback_used": true,
+        "fallback_reason": "No historical cases in training corpus matched candidate index definitions.",
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_customer_id",
+            "canonical_key": "(customer_id)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_c": {
+        "policy": "outcome_aware",
+        "selected_candidate_id": "cand_orders_customer_id",
+        "fallback_used": true,
+        "fallback_reason": "No verified measured historical cases matched candidate index definitions.",
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_customer_id",
+            "canonical_key": "(customer_id)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      }
+    }
+  },
+  {
+    "case_id": "CASE-T8-02",
+    "template_id": "T8",
+    "memory_id": 14,
+    "query_text": "SELECT * FROM orders WHERE customer_id = 105 AND status = 'SHIPPED';",
+    "target_table": "orders",
+    "eligible_candidate_count": 1,
+    "eligible_candidates": [
+      {
+        "candidate_id": "cand_orders_customer_id",
+        "columns": [
+          "customer_id"
+        ],
+        "is_baseline": true,
+        "canonical_key": "orders:btree:customer_id",
+        "hypopg_cost_improvement": 76.52
+      }
+    ],
+    "selections": {
+      "policy_a": {
+        "policy": "planner_only",
+        "selected_candidate_id": "cand_orders_customer_id",
+        "fallback_used": false,
+        "fallback_reason": null,
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_customer_id",
+            "canonical_key": "(customer_id)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_b": {
+        "policy": "similarity",
+        "selected_candidate_id": "cand_orders_customer_id",
+        "fallback_used": true,
+        "fallback_reason": "No historical cases in training corpus matched candidate index definitions.",
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_customer_id",
+            "canonical_key": "(customer_id)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      },
+      "policy_c": {
+        "policy": "outcome_aware",
+        "selected_candidate_id": "cand_orders_customer_id",
+        "fallback_used": true,
+        "fallback_reason": "No verified measured historical cases matched candidate index definitions.",
+        "lambda_reg": 1.5,
+        "historical_support": {
+          "source": "none",
+          "cases_considered": 0
+        },
+        "candidate_scores": [
+          {
+            "candidate_id": "cand_orders_customer_id",
+            "canonical_key": "(customer_id)",
+            "is_baseline": true,
+            "hypopg_cost_improvement": 0.0,
+            "similarity_support": 0.0,
+            "outcome_support": 0.0,
+            "composite_score": 1.0,
+            "matching_history_count": 0,
+            "eligible_measured_count": 0
+          }
+        ]
+      }
+    }
+  }
+]
