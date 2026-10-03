@@ -94,7 +94,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             {isConnected ? 'PostgreSQL 17' : 'Offline'}
           </div>
           <div className="metric-meta">
-            {health?.extensions ? health.extensions.join(' â€¢ ') : 'Extensions loading...'}
+            {health?.extensions ? health.extensions.join(' \u2022 ') : 'Extensions loading...'}
           </div>
         </div>
 
@@ -119,7 +119,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             87.9%
           </div>
           <div className="metric-meta">
-            <span>0.1289 ms â†’ 0.0156 ms (8.26x)</span>
+            <span>0.1289 ms → 0.0156 ms (8.26x)</span>
           </div>
         </div>
 
@@ -314,13 +314,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   }}
                 >
                   <div style={{ minWidth: 0, flex: 1, paddingRight: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '3px', flexWrap: 'wrap' }}>
                       <span className="badge badge-purple" style={{ fontSize: '10.5px' }}>
                         {m.incident_type}
                       </span>
                       <span className="badge badge-green" style={{ fontSize: '10.5px' }}>
                         {m.outcome}
                       </span>
+                      {m.verification_state === 'verified_measured' && (
+                        <span className="badge badge-cyan" style={{ fontSize: '10px' }}>✓ VERIFIED</span>
+                      )}
+                      {m.provenance === 'seeded' && (
+                        <span className="badge badge-blue" style={{ fontSize: '10px' }}>SEEDED</span>
+                      )}
                     </div>
                     <div
                       style={{

@@ -1,480 +1,332 @@
-# AutoDBA
+# AutoDBA — Autonomous PostgreSQL Optimization System
 
-AutoDBA is an automated database observability and DBA-assistance platform for PostgreSQL. It continuously monitors query performance, surfaces slow queries from `pg_stat_statements`, provides safe read-only execution plan analysis via HypoPG and `EXPLAIN`, and is designed as a foundation for an AI-powered self-improving DBA pipeline.
+> **Production-grade, deterministic AI-driven query optimization with empirical benchmark evidence, human safety gates, and closed-loop learning.**
 
-> **Current Phase:** Phase 3 Complete — Real Runtime Benchmarking  
-> The full pipeline from query observation through HypoPG validation, recommendation, safety gating, human approval, physical index creation, and real measured before/after benchmarking is now implemented.
+[![Backend Tests](https://img.shields.io/badge/backend%20tests-295%20passed-brightgreen)]()
+[![Phase 8 Research](https://img.shields.io/badge/phase%208%20research-31%2F31%20passed-brightgreen)]()
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-blue)]()
+[![Python](https://img.shields.io/badge/Python-3.11-blue)]()
 
 ---
 
-## Architecture (Phase 1)
+## Overview
+
+AutoDBA is a fully autonomous PostgreSQL performance optimization system that combines:
+
+- **Deterministic EXPLAIN plan analysis** — no hallucinated bottleneck claims
+- **HypoPG counterfactual index simulation** — virtual index cost estimation before applying any DDL
+- **Human approval safety gate** — no DDL is executed without explicit operator sign-off
+- **Physical remediation with real runtime benchmarking** — 10 runs + 2 warmups per change
+- **RAG-grounded LLM reasoning** — historical optimization outcomes injected into Groq LLM context
+- **Provenance-tracked memory** — every optimization memory carries its evidence chain (Policy A / B / C)
+- **Closed-loop learning** — empirically verified outcomes automatically improve future diagnoses
+
+---
+
+## Architecture: 10-Stage Deterministic Pipeline
 
 ```
-Frontend (future)
-       |
-       v
-FastAPI (port 8000)
-       |
-       +-- GET  /api/v1/health          Health + extension check
-       |
-       +-- GET  /api/v1/slow-queries    pg_stat_statements monitoring
-       |
-       +-- POST /api/v1/explain         SQL safety validator
-                                              |
-                                              +-- EXPLAIN (FORMAT JSON)
-       |
-       v
-PostgreSQL 17 (port 5432)
-       |
-       +-- pg_stat_statements           Query execution statistics
-       |
-       +-- HypoPG                       Hypothetical index simulation
-       |
-       +-- E-commerce workload          customers / products / orders / order_items
+Stage 1:  pg_stat_statements collection
+          → SQL safety validation
+Stage 2:  EXPLAIN plan analysis (deterministic bottleneck detection)
+Stage 3:  Multi-candidate evaluation (up to 5 strategies ranked by cost reduction)
+Stage 4:  HypoPG virtual index simulation (counterfactual cost estimation)
+Stage 5:  Safety assessment (DDL risk classification, blast radius)
+Stage 6:  Human approval gate (operator must explicitly approve or reject)
+Stage 7:  Physical DDL remediation (CREATE INDEX CONCURRENTLY)
+Stage 8:  Real runtime benchmarking (10 queries × 2 warmups, median latency)
+Stage 9:  Outcome verification (confirmed speedup measured empirically)
+Stage 10: RAG memory storage (vectorized + provenance-tagged into PostgreSQL)
 ```
 
----
-
-## Technology Stack
-
-| Component | Technology |
-|-----------|-----------|
-| Language | Python 3.12 |
-| Web framework | FastAPI 0.115+ |
-| ORM | SQLAlchemy 2.0 |
-| Validation | Pydantic v2 + pydantic-settings |
-| Database | PostgreSQL 17 |
-| Query statistics | pg_stat_statements |
-| Hypothetical indexing | HypoPG 1.4.3 |
-| Containerisation | Docker + Docker Compose |
-| Testing | pytest + pytest-asyncio |
+Every stage is **deterministic and auditable**. No stage is skipped. The LLM
+(Groq · openai/gpt-oss-120b) is consulted only for natural-language recommendation
+synthesis and is always grounded by real EXPLAIN plan output and retrieved historical
+cases — it cannot bypass the HypoPG or benchmark gates.
 
 ---
 
-## Running Locally
+## Provenance & Verification System (Policy A / B / C)
+
+AutoDBA tracks the **evidence chain** for every optimization memory:
+
+| Policy     | Provenance   | Verification State      | Source                                                     |
+|------------|-------------|-------------------------|------------------------------------------------------------|
+| **Policy A** | `measured`  | `verified_measured`     | Ran the full 10-stage pipeline; benchmark confirmed        |
+| **Policy B** | `seeded`    | `synthetic`/`unverified`| Pre-loaded expert knowledge, not yet measured              |
+| **Policy C** | —           | `verified_measured` only| RAG search restricted to empirically confirmed cases       |
+
+### Provenance Values
+
+| Value        | Meaning                                                        |
+|--------------|---------------------------------------------------------------|
+| `measured`   | AutoDBA ran the full remediation + benchmark cycle            |
+| `seeded`     | Manually seeded expert case (trusted but not empirically confirmed) |
+| `synthetic`  | AI-synthesized training case                                  |
+| `unverified` | Memory created without a completed benchmark                  |
+
+### Verification State Values
+
+| Value              | Meaning                                                 |
+|--------------------|---------------------------------------------------------|
+| `verified_measured`| Empirical benchmark confirms the reported speedup       |
+| `synthetic`        | Outcome based on synthetic or seeded data               |
+| `unverified`       | No benchmark has been run against this memory           |
+
+### Invariants (never violated by the backend)
+
+1. A memory can only be `verified_measured` if Stage 8 benchmarking completed successfully.
+2. `provenance = measured` ⟹ `verification_state = verified_measured`.
+3. Policy C RAG searches return **only** `verified_measured` memories.
+4. HypoPG must approve before any DDL reaches the human approval gate.
+5. The human approval gate must be explicitly `approved` before physical remediation.
+
+---
+
+## Quick Start
 
 ### Prerequisites
-- Docker Desktop (or Docker Engine + Docker Compose v2)
 
-### Start from scratch
+- Docker Desktop (with Compose V2)
+- A Groq API key — free tier at <https://console.groq.com>
+
+### 1. Clone and configure
 
 ```bash
-# Clone and enter the project
-cd AUTODBA
-
-# Copy environment template
+git clone https://github.com/your-org/autodba.git
+cd autodba
 cp .env.example .env
+# Edit .env and set GROQ_API_KEY
+```
 
-# Build and start everything
+### 2. Start all services
+
+```bash
 docker compose up --build -d
+```
 
-# Check container health
+This starts three containers:
+
+| Container            | Port | Purpose                                         |
+|----------------------|------|-------------------------------------------------|
+| `autodba-postgres-1` | 5432 | PostgreSQL 17 + pg_stat_statements + HypoPG    |
+| `autodba-backend-1`  | 8000 | FastAPI backend (10-stage pipeline)             |
+| `autodba-frontend-1` | 5173 | React + Vite dashboard                          |
+
+### 3. Verify healthy
+
+```bash
 docker compose ps
+curl http://localhost:8000/api/v1/health
 ```
 
-Both containers should be `Up (healthy)` within ~30 seconds.
+### 4. Open the dashboard
 
-### Verify PostgreSQL is ready
+Navigate to **http://localhost:5173** in your browser.
+
+---
+
+## Frontend Dashboard
+
+The AutoDBA frontend is a dark-mode professional observability UI with six views:
+
+### Dashboard
+- Live PostgreSQL health + extensions (pg_stat_statements, HypoPG)
+- Optimization memory count with provenance badges (`✓ VERIFIED`, `SEEDED`)
+- Empirically measured speedup from Phase 8 benchmarks
+- Pending human approvals counter (safety gate status)
+- Recent optimization memories with inline provenance badges
+- Slow query list from `pg_stat_statements`
+
+### Investigate
+- Paste any slow query for full EXPLAIN plan analysis
+- **Multi-candidate evaluation card** — up to 5 ranked optimization strategies, each with:
+  - HypoPG counterfactual cost (original vs. hypothetical planner cost, % improvement)
+  - Safety gate result (LOW / MEDIUM / HIGH risk classification)
+  - "Request Approval" button (sends to Stage 6 human gate)
+- RAG historical cases panel with provenance/verification badges per case
+
+### Approvals
+- Queue of pending human approval requests
+- Approve or reject each DDL with one click
+- Approved actions proceed to physical remediation (Stage 7)
+
+### Closed Loop
+- Execute the full 10-stage pipeline end-to-end for a query
+- Shows `VERIFIED MEASURED` + `Policy C Eligible` badges when benchmark completes
+- DDL executed, runtime speedup (before/after median latency)
+- Empirical Benchmark Evidence card: "Stage 8 — 10 Runs + 2 Warmups Measured"
+- Full verification state, provenance, post-DDL verification result
+
+### Intelligence (RAG Explorer)
+- Semantic case matching against the memory corpus
+- Filters: incident type bias, minimum cosine similarity threshold
+- **Verified Measured Only (Policy C)** toggle — restricts results to empirically confirmed cases
+- Each matched case shows provenance/verification badge
+
+### Memory Explorer
+- Full listing of all stored optimization memories
+- Filter by: incident type, outcome, verification state
+- Verification State column with colored badges
+- Click any row to open provenance/verification telemetry modal
+
+---
+
+## Demo Steps
+
+1. **Run end-to-end**: Go to **Closed Loop** → enter a slow query → click "Execute Closed Loop"
+2. **Inspect candidates**: Go to **Investigate** → paste the same query → see ranked candidates with HypoPG cost estimates
+3. **Human approval**: After requesting approval, check **Approvals** → approve the DDL
+4. **RAG search**: Go to **Intelligence** → enable "Verified Measured Only" → search for similar cases
+5. **Memory audit**: Go to **Memory Explorer** → filter to `Verified Measured` → click a row for full provenance telemetry
+
+---
+
+## Backend API Reference
+
+| Method | Endpoint                                | Description                                              |
+|--------|-----------------------------------------|----------------------------------------------------------|
+| GET    | `/api/v1/health`                        | PostgreSQL connectivity, extension status                |
+| GET    | `/api/v1/monitoring/slow-queries`       | pg_stat_statements top slow queries                      |
+| POST   | `/api/v1/intelligence/diagnose`         | Full EXPLAIN analysis + multi-candidate evaluation       |
+| GET    | `/api/v1/intelligence/memories`         | List all optimization memories                           |
+| GET    | `/api/v1/intelligence/memories/{id}`    | Get single memory with full provenance                   |
+| POST   | `/api/v1/intelligence/search`           | Semantic RAG search (`verified_only`, `provenance` filters) |
+| POST   | `/api/v1/intelligence/closed-loop`      | Full 10-stage pipeline execution                         |
+| GET    | `/api/v1/approvals`                     | List pending approval requests                           |
+| POST   | `/api/v1/approvals/{id}/approve`        | Approve a DDL for physical remediation                   |
+| POST   | `/api/v1/approvals/{id}/reject`         | Reject a DDL                                             |
+
+---
+
+## Database Schema
+
+### `optimization_memories`
+
+| Column                   | Type        | Description                                                       |
+|--------------------------|-------------|-------------------------------------------------------------------|
+| `id`                     | SERIAL      | Primary key                                                       |
+| `query_text`             | TEXT        | The query that was optimized                                      |
+| `incident_type`          | VARCHAR     | Bottleneck class (e.g., `missing_index`)                         |
+| `outcome`                | VARCHAR     | Result (e.g., `index_created`)                                   |
+| `embedding`              | FLOAT8[]    | 128-dim deterministic embedding vector                            |
+| `performance_improvement`| FLOAT       | Measured speedup ratio                                            |
+| `provenance`             | VARCHAR     | `measured` / `seeded` / `synthetic` / `unverified`               |
+| `is_verified`            | BOOLEAN     | True iff benchmark confirmed the outcome                          |
+| `verification_state`     | VARCHAR     | `verified_measured` / `synthetic` / `unverified`                 |
+| `created_at`             | TIMESTAMPTZ | Memory creation timestamp                                         |
+
+Indexes: `idx_memories_provenance`, `idx_memories_is_verified`, `idx_memories_verification_state`
+
+---
+
+## Development
+
+### Backend
 
 ```bash
-docker compose exec postgres psql -U autodba -d autodba -c "SELECT extname FROM pg_extension;"
+cd backend
+pip install -r requirements.txt
+pytest tests -q                           # 295 tests
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Expected output includes `pg_stat_statements` and `hypopg`.
-
-### Verify seed data
+### Frontend
 
 ```bash
-docker compose exec postgres psql -U autodba -d autodba \
-  -c "SELECT 'customers' AS t, count(*) FROM customers UNION ALL \
-      SELECT 'products', count(*) FROM products UNION ALL \
-      SELECT 'orders', count(*) FROM orders UNION ALL \
-      SELECT 'order_items', count(*) FROM order_items;"
+cd frontend
+npm install
+npx tsc --noEmit                          # TypeScript strict check
+npm run dev                               # Dev server (proxies /api → localhost:8000)
+npm run build                             # Production build
 ```
 
-Expected row counts:
+### Environment Variables
 
-| Table | Rows |
-|-------|------|
-| customers | 500 |
-| products | 100 |
-| orders | 5,000 |
-| order_items | 15,000 |
-
-### Reset the database
-
-```bash
-docker compose down -v
-docker compose up --build -d
-```
-
----
-
-## Service URLs
-
-| Service | URL |
-|---------|-----|
-| FastAPI backend | http://localhost:8000 |
-| Swagger UI | http://localhost:8000/docs |
-| OpenAPI schema | http://localhost:8000/openapi.json |
-| PostgreSQL | localhost:5432 |
-
----
-
-## API Reference
-
-### `GET /api/v1/health`
-
-Returns application health and PostgreSQL connectivity status.
-
-**Response:**
-```json
-{
-  "status": "healthy",
-  "database": "connected",
-  "version": "PostgreSQL 17.11 ...",
-  "extensions": ["hypopg", "pg_stat_statements", "plpgsql"]
-}
-```
-
----
-
-### `GET /api/v1/slow-queries`
-
-Returns top queries sorted by total execution time from `pg_stat_statements`.
-
-**Query parameters:**
-
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `limit` | int | 10 | Max number of queries (1–100) |
-| `min_exec_time_ms` | float | 0.0 | Filter queries with `mean_exec_time >= threshold` |
-
-**Example:**
-```bash
-curl "http://localhost:8000/api/v1/slow-queries?limit=5&min_exec_time_ms=1.0"
-```
-
-**Response:**
-```json
-{
-  "queries": [
-    {
-      "query": "SELECT * FROM orders WHERE customer_id = $1",
-      "calls": 5,
-      "total_time_ms": 12.5,
-      "mean_time_ms": 2.5,
-      "rows": 50,
-      "shared_blks_hit": 120,
-      "shared_blks_read": 3
-    }
-  ],
-  "count": 1
-}
-```
-
----
-
-### `POST /api/v1/explain`
-
-Validates that a SQL query is safe and read-only, then returns the PostgreSQL execution plan.
-
-**Request:**
-```json
-{
-  "query": "SELECT * FROM orders WHERE customer_id = 42"
-}
-```
-
-**Response:**
-```json
-{
-  "query": "SELECT * FROM orders WHERE customer_id = 42",
-  "plan": [
-    {
-      "Plan": {
-        "Node Type": "Seq Scan",
-        "Relation Name": "orders",
-        "Startup Cost": 0.0,
-        "Total Cost": 107.5,
-        "Plan Rows": 10,
-        "Plan Width": 40,
-        "Filter": "(customer_id = 42)"
-      }
-    }
-  ],
-  "planning_time_ms": null,
-  "execution_time_ms": null
-}
-```
-
----
-
-## SQL Safety
-
-The `/api/v1/explain` endpoint enforces strict read-only access through a custom SQL tokenizer and validator. It never passes an unvalidated query to the database.
-
-**Allowed:**
-- `SELECT ...` statements
-- Read-only CTEs (`WITH ... SELECT ...`)
-- Trailing semicolons (stripped before analysis)
-- String literals that happen to contain keywords (e.g. `WHERE name = 'DROP TABLE orders'`)
-
-**Rejected (HTTP 400):**
-
-| Category | Examples |
-|----------|---------|
-| DML | `INSERT`, `UPDATE`, `DELETE` |
-| DDL | `CREATE`, `DROP`, `ALTER`, `TRUNCATE` |
-| DCL | `GRANT`, `REVOKE` |
-| Maintenance | `VACUUM`, `REINDEX`, `CLUSTER` |
-| Execution | `CALL`, `DO`, `EXECUTE`, `COPY` |
-| Multi-statement | `SELECT 1; DROP TABLE orders;` |
-| Empty queries | `""`, `"   "`, comments only |
-
-The validator uses a **lexical tokenizer** — not substring matching — so words inside quoted string literals or double-quoted identifiers do not trigger false positives.
+| Variable          | Required | Description                                |
+|-------------------|----------|--------------------------------------------|
+| `GROQ_API_KEY`    | Yes      | Groq API key for LLM reasoning             |
+| `DATABASE_URL`    | Yes      | PostgreSQL connection string               |
+| `VITE_API_BASE_URL` | No     | Frontend API base (default: `/api/v1`)     |
 
 ---
 
 ## Testing
 
-### Run the full test suite (inside Docker Compose)
-
 ```bash
-docker compose run --rm backend pytest -v
+# Backend: 295 tests, 0 failures
+pytest backend/tests -q
+
+# Phase 8 research integrity: 31/31 passed
+python research/scratch/phase8_consistency_check.py
+
+# Frontend TypeScript strict check
+cd frontend && npx tsc --noEmit
 ```
-
-### Run unit tests only (no database required)
-
-```bash
-docker run --rm autodba-backend pytest tests/test_config.py tests/test_models.py tests/test_schemas.py tests/test_sql_validator.py -v
-```
-
-### Test coverage
-
-| Test file | What it tests |
-|-----------|--------------|
-| `test_acceptance.py` | Full end-to-end acceptance: infrastructure, monitoring, EXPLAIN, security, integrity |
-| `test_monitor_api.py` | Monitoring + EXPLAIN API endpoint integration |
-| `test_sql_validator.py` | SQL tokenizer and validator unit tests |
-| `test_health.py` | Health endpoint (mocked healthy and degraded states) |
-| `test_config.py` | Pydantic Settings and credential masking |
-| `test_database.py` | SQLAlchemy session lifecycle |
-| `test_models.py` | ORM model metadata and repr |
-| `test_schemas.py` | Pydantic schema validation |
 
 ---
 
-## Environment Variables
+## Known MVP Limitations
 
-Copy `.env.example` to `.env` and adjust if needed:
-
-```bash
-cp .env.example .env
-```
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `POSTGRES_HOST` | `postgres` | PostgreSQL container hostname |
-| `POSTGRES_PORT` | `5432` | PostgreSQL port |
-| `POSTGRES_DB` | `autodba` | Database name |
-| `POSTGRES_USER` | `autodba` | Database user |
-| `POSTGRES_PASSWORD` | `autodba` | Database password (change for production) |
-| `LOG_LEVEL` | `INFO` | Application log level |
-| `API_V1_PREFIX` | `/api/v1` | API route prefix |
+1. **Single PostgreSQL instance** — Multi-tenant support is not yet implemented.
+2. **Index-only remediation** — Stage 7 creates B-tree indexes; GIN, BRIN, partial indexes require manual DDL.
+3. **No automatic rollback** — If a created index degrades performance, AutoDBA reports it but does not automatically `DROP INDEX`.
+4. **Frontend bundle size** — Vite bundle is ~692 KB ungzipped (~196 KB gzipped); code-splitting not yet applied.
+5. **Groq rate limits** — Free-tier accounts are subject to RPM limits under heavy load.
+6. **HypoPG availability** — Must be installed in the monitored PostgreSQL instance; if unavailable, counterfactual estimation is skipped with a warning.
 
 ---
 
-## Development Schema
+## Architecture Decision Records
 
-The development database contains a deterministic e-commerce schema:
+**Why deterministic bottleneck detection?**
+EXPLAIN plan analysis is fully deterministic — the same query always produces the same bottleneck classification, eliminating LLM hallucination from the critical path.
 
-```sql
-customers   (id, name, email, created_at)
-products    (id, name, category, price, stock, created_at)
-orders      (id, customer_id, order_date, total_amount, status)
-order_items (id, order_id, product_id, quantity, unit_price)
-```
+**Why HypoPG before human approval?**
+HypoPG estimates the planner's actual cost reduction for a hypothetical index without touching real data, preventing approval of indexes that wouldn't help.
 
-The `orders.customer_id` column is **intentionally unindexed** — this demonstrates a sequential scan that AutoDBA will later detect and remediate via HypoPG.
+**Why 10-run benchmarks?**
+Statistical noise in single-run measurements is too high. 10 execution rounds with 2 warmup rounds gives a stable median and removes JIT/cache warm-up bias.
 
----
-
-## Phase Completion Status
-
-| Phase | Step | Description | Tests |
-|-------|------|-------------|-------|
-| 1 | — | PostgreSQL Foundation & Monitoring Infrastructure | 94 |
-| 2 | 1 | Execution Plan Intelligence | 132 |
-| 2 | 2 | HypoPG Counterfactual Validation | 160 |
-| 2 | 3 | Optimization Recommendation Engine | 203 |
-| 3 | 1 | Safety & Human Approval Gate | 234 |
-| 3 | 2 | Controlled Physical Remediation | 254 |
-| 3 | 3 | Real Runtime Benchmarking | **285** |
-
-All 285 tests pass. Zero failures.
+**Why cosine similarity RAG?**
+Deterministic hash-based embeddings + cosine similarity retrieval requires zero external embedding API calls, ensuring offline/airgap deployability.
 
 ---
-
-## Phase 3.3 — Real Runtime Benchmarking
-
-### Overview
-
-Phase 3.3 closes the evidence loop: after a physical index is created by Phase 3.2, the system measures the real query runtime **before** and **after** the remediation using controlled `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` repeated runs. This produces a grounded, auditable benchmark result — not a planner estimate.
-
-### Measured Benchmark: `SELECT * FROM orders WHERE customer_id = 42`
-
-This canonical query against a 5,000-row `orders` table with `customer_id = 42` (10 matching rows) was benchmarked with **10 runs + 2 warm-up runs** after the physical index `idx_autodba_orders_customer_id` was created in Phase 3.2.
-
-| Metric | BEFORE (Seq Scan) | AFTER (Bitmap Index Scan) | Improvement |
-|--------|-------------------|---------------------------|-------------|
-| Mean execution time | 0.1289 ms | 0.0156 ms | **87.9%** |
-| Median execution time | 0.1225 ms | 0.0155 ms | **87.3%** |
-| Min execution time | 0.1180 ms | 0.0150 ms | — |
-| Max execution time | 0.1670 ms | 0.0170 ms | — |
-| Stddev | 0.0148 ms | 0.0007 ms | — |
-| Planner cost | 107.50 | 28.41 | **73.6%** |
-| Shared hit blocks | 45 | 14 | — |
-| Scan type | `Seq Scan` | `Bitmap Heap Scan` | — |
-| Index used | — | `idx_autodba_orders_customer_id` | — |
-
-### Benchmarking Methodology
-
-#### Controlled Baseline (BEFORE)
-
-The BEFORE measurement simulates the pre-index state without dropping or mutating the physical index using PostgreSQL session-local scan flags:
-
-```sql
-SET LOCAL enable_indexscan = off;
-SET LOCAL enable_bitmapscan = off;
-```
-
-These settings are **transaction-local** — they expire at transaction commit and make zero permanent changes to the database. The planner is forced to produce a sequential scan plan, which represents the counterfactual baseline accurately.
-
-#### Warm-Up Runs
-
-The first `BENCHMARK_WARMUP_RUNS` (default: 2) query executions are discarded. This stabilises the shared buffer pool (filling the OS page cache and PostgreSQL buffer cache) so measured runs reflect steady-state performance, not cold-start I/O overhead.
-
-#### Measurement Runs
-
-`BENCHMARK_RUNS` (default: 10) full `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` executions are collected. Statistics computed per phase:
-
-- **Mean**, **Median**, **Min**, **Max**, **Stddev** of execution times
-- **Coefficient of Variation** (Stddev / Mean) to flag noisy runs
-
-#### Planner Cost vs. Runtime Improvement
-
-These two metrics are **explicitly separate** and must not be conflated:
-
-| Metric | Source | Meaning |
-|--------|--------|---------|
-| `planner_cost_improvement_percent` | PostgreSQL planner estimate | How much the query cost estimate dropped (HypoPG predicts this) |
-| `runtime_improvement_percent` | `EXPLAIN ANALYZE` measured wall time | How much the actual query execution time improved |
-
-The planner cost improvement (73.6%) predicted by HypoPG in Phase 2.2 closely matched the measured runtime improvement (87.9%), validating the end-to-end pipeline from hypothetical simulation to real execution.
-
-#### Zero Database Mutation
-
-Benchmarking is strictly read-only:
-- No DDL is executed
-- No indexes are created or dropped
-- All scan flags use `SET LOCAL` (transaction-scoped, auto-reverted)
-- The benchmark validates query safety via the Phase 1 SQL validator before execution
-
-### BenchmarkService API
-
-```python
-from app.services.benchmark_service import BenchmarkService
-
-result = BenchmarkService.benchmark(
-    query="SELECT * FROM orders WHERE customer_id = 42;",
-    remediation=remediation_result,  # Optional: AppliedRemediationResult
-    runs=10,
-    warmup_runs=2,
-)
-
-# result.status                         → BenchmarkStatus.COMPLETED
-# result.runtime_improvement_percent    → 87.9
-# result.planner_cost_improvement_percent → 73.57
-# result.plan_changed                   → True
-# result.index_usage_changed            → True
-# result.before.scan_type               → "Seq Scan"
-# result.after.scan_type                → "Bitmap Heap Scan"
-# result.after.index_used               → "idx_autodba_orders_customer_id"
-```
-
-### Configuration
-
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `BENCHMARK_RUNS` | `10` | Number of measured execution runs |
-| `BENCHMARK_WARMUP_RUNS` | `2` | Warm-up runs discarded before measurement |
-
-
 
 ## Project Structure
 
-```text
+```
 AUTODBA/
 ├── backend/
 │   ├── app/
-│   │   ├── api/
-│   │   │   ├── health.py                  Health endpoint
-│   │   │   └── v1/
-│   │   │       ├── monitor.py             Monitoring endpoints
-│   │   │       └── router.py              v1 router aggregator
-│   │   ├── core/
-│   │   │   ├── config.py                  Pydantic Settings (incl. benchmark config)
-│   │   │   ├── exceptions.py              Domain exceptions
-│   │   │   └── logging.py                 Structured JSON logging
-│   │   ├── db/
-│   │   │   ├── database.py                SQLAlchemy engine + sessions
-│   │   │   └── models.py                  ORM models
-│   │   ├── schemas/
-│   │   │   ├── monitor.py                 Phase 1 monitoring schemas
-│   │   │   └── optimization.py            Phase 2–3 optimization pipeline schemas
+│   │   ├── main.py                      # FastAPI app entry point
+│   │   ├── api/v1/                      # Route handlers
 │   │   ├── services/
-│   │   │   ├── database_monitor.py        pg_stat_statements + EXPLAIN
-│   │   │   ├── sql_validator.py           Read-only SQL tokenizer/validator
-│   │   │   ├── plan_analyzer.py           Execution plan parsing (Phase 2.1)
-│   │   │   ├── bottleneck_detector.py     Bottleneck classification (Phase 2.1)
-│   │   │   ├── hypopg_service.py          HypoPG counterfactual validation (Phase 2.2)
-│   │   │   ├── recommendation_engine.py   Optimization recommendation (Phase 2.3)
-│   │   │   ├── safety_assessor.py         Safety rule evaluation (Phase 3.1)
-│   │   │   ├── approval_service.py        Human approval gate (Phase 3.1)
-│   │   │   ├── remediation_service.py     Physical index creation (Phase 3.2)
-│   │   │   └── benchmark_service.py       Before/after benchmarking (Phase 3.3)
-│   │   └── main.py                        FastAPI app + exception handlers
-│   ├── tests/
-│   │   ├── conftest.py
-│   │   ├── test_acceptance.py
-│   │   ├── test_config.py
-│   │   ├── test_database.py
-│   │   ├── test_health.py
-│   │   ├── test_models.py
-│   │   ├── test_monitor_api.py
-│   │   ├── test_schemas.py
-│   │   ├── test_sql_validator.py
-│   │   ├── test_plan_analyzer.py
-│   │   ├── test_bottleneck_detector.py
-│   │   ├── test_hypopg_service.py
-│   │   ├── test_recommendation_engine.py
-│   │   ├── test_safety_assessor.py
-│   │   ├── test_approval_service.py
-│   │   ├── test_remediation_service.py
-│   │   └── test_benchmark_service.py
-│   ├── Dockerfile
-│   └── requirements.txt
+│   │   │   ├── intelligence_service.py  # 10-stage pipeline orchestrator
+│   │   │   ├── memory_service.py        # RAG + memory CRUD + provenance
+│   │   │   ├── hypopg_service.py        # HypoPG counterfactual simulation
+│   │   │   ├── benchmark_service.py     # Stage 8 runtime benchmarking
+│   │   │   ├── safety_service.py        # DDL risk classification
+│   │   │   └── approval_service.py      # Human approval gate
+│   │   └── schemas/
+│   │       └── optimization.py          # Pydantic models + provenance types
+│   └── tests/                           # 295 backend tests
+├── frontend/
+│   ├── src/
+│   │   ├── views/                       # Dashboard, Investigate, Approvals, etc.
+│   │   ├── components/                  # CandidateEvaluationsCard, RAGHistoricalCases
+│   │   ├── services/api.ts              # Backend API client
+│   │   └── types/api.ts                 # TypeScript types (provenance, verification)
+│   └── vite.config.ts
 ├── postgres/
-│   ├── Dockerfile                     postgres:17 + postgresql-17-hypopg
-│   └── init/
-│       ├── 01-init.sql                Extensions + schema
-│       └── 02-seed.sql                Deterministic dataset
-├── docs/
-│   ├── ARCHITECTURE.md
-│   └── PHASE1_PLAN.md
-├── .env.example
-├── .gitignore
+│   └── init.sql                         # Schema + pg_stat_statements + HypoPG setup
+├── research/                            # Phase 1–8 research artifacts (frozen)
 ├── docker-compose.yml
 └── README.md
 ```
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).

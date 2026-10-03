@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MemoryListItem, OptimizationMemory } from '../types/api';
 import { api } from '../services/api';
-import { History, Search, Database, Layers, Eye, X, CheckCircle2, TrendingUp } from 'lucide-react';
+import { History, Search, Database, Layers, Eye, X, CheckCircle2, TrendingUp, ShieldCheck } from 'lucide-react';
 
 interface MemoryExplorerViewProps {
   memories: MemoryListItem[];
@@ -12,6 +12,7 @@ export const MemoryExplorerView: React.FC<MemoryExplorerViewProps> = ({ memories
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIncidentType, setSelectedIncidentType] = useState('all');
   const [selectedOutcome, setSelectedOutcome] = useState('all');
+  const [selectedVerificationState, setSelectedVerificationState] = useState('all');
   const [activeMemory, setActiveMemory] = useState<OptimizationMemory | null>(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
 
@@ -28,7 +29,16 @@ export const MemoryExplorerView: React.FC<MemoryExplorerViewProps> = ({ memories
     const matchesOutcome =
       selectedOutcome === 'all' || m.outcome.toLowerCase() === selectedOutcome;
 
-    return matchesSearch && matchesType && matchesOutcome;
+    const matchesVerification =
+      selectedVerificationState === 'all' ||
+      (selectedVerificationState === 'verified_measured' &&
+        (m.verification_state === 'verified_measured' || m.is_verified)) ||
+      (selectedVerificationState === 'synthetic' &&
+        (m.verification_state === 'synthetic' || m.provenance === 'seeded')) ||
+      (selectedVerificationState === 'unverified' &&
+        (m.verification_state === 'unverified' || (!m.is_verified && m.provenance !== 'seeded')));
+
+    return matchesSearch && matchesType && matchesOutcome && matchesVerification;
   });
 
   const handleViewDetail = async (id: number) => {
@@ -108,6 +118,20 @@ export const MemoryExplorerView: React.FC<MemoryExplorerViewProps> = ({ memories
               <option value="regression">regression</option>
             </select>
           </div>
+
+          <div>
+            <label className="label">Verification State</label>
+            <select
+              className="select"
+              value={selectedVerificationState}
+              onChange={(e) => setSelectedVerificationState(e.target.value)}
+            >
+              <option value="all">All States</option>
+              <option value="verified_measured">Verified Measured Only</option>
+              <option value="synthetic">Seeded / Synthetic Only</option>
+              <option value="unverified">Unverified Only</option>
+            </select>
+          </div>
         </div>
 
         {/* Memories Table */}
@@ -119,6 +143,7 @@ export const MemoryExplorerView: React.FC<MemoryExplorerViewProps> = ({ memories
                 <th>Incident Type</th>
                 <th>Query Text</th>
                 <th>Outcome</th>
+                <th>Verification State</th>
                 <th>Outcome Summary</th>
                 <th>Action</th>
               </tr>
@@ -126,7 +151,7 @@ export const MemoryExplorerView: React.FC<MemoryExplorerViewProps> = ({ memories
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
+                  <td colSpan={7} style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
                     No memories found matching current filters
                   </td>
                 </tr>
@@ -141,13 +166,30 @@ export const MemoryExplorerView: React.FC<MemoryExplorerViewProps> = ({ memories
                         {m.incident_type}
                       </span>
                     </td>
-                    <td style={{ maxWidth: '320px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <td style={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       <code style={{ fontSize: '11.5px', color: '#93c5fd' }}>{m.query_text}</code>
                     </td>
                     <td>
                       <span className={`badge ${m.outcome === 'success' ? 'badge-green' : 'badge-amber'}`}>
                         {m.outcome}
                       </span>
+                    </td>
+                    <td>
+                      {m.verification_state === 'verified_measured' || m.is_verified ? (
+                        <span className="badge badge-green" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10.5px' }}>
+                          <ShieldCheck size={11} />
+                          <span>VERIFIED MEASURED</span>
+                        </span>
+                      ) : m.verification_state === 'synthetic' || m.provenance === 'seeded' ? (
+                        <span className="badge badge-purple" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10.5px' }}>
+                          <Database size={11} />
+                          <span>SEEDED</span>
+                        </span>
+                      ) : (
+                        <span className="badge badge-neutral" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10.5px' }}>
+                          <span>UNVERIFIED</span>
+                        </span>
+                      )}
                     </td>
                     <td style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
                       {m.outcome_summary || 'Empirical benchmark verified'}
@@ -214,6 +256,47 @@ export const MemoryExplorerView: React.FC<MemoryExplorerViewProps> = ({ memories
             </div>
 
             <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+                  gap: '10px',
+                  padding: '12px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                }}
+              >
+                <div>
+                  <span style={{ color: 'var(--text-muted)' }}>Provenance:</span>{' '}
+                  <strong style={{ color: '#60a5fa', textTransform: 'uppercase' }}>
+                    {activeMemory.provenance || 'unverified'}
+                  </strong>
+                </div>
+                <div>
+                  <span style={{ color: 'var(--text-muted)' }}>Verification State:</span>{' '}
+                  <strong
+                    style={{
+                      color:
+                        activeMemory.verification_state === 'verified_measured' || activeMemory.is_verified
+                          ? '#34d399'
+                          : activeMemory.verification_state === 'synthetic'
+                          ? '#a78bfa'
+                          : '#fbbf24',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {activeMemory.verification_state || (activeMemory.is_verified ? 'verified_measured' : 'unverified')}
+                  </strong>
+                </div>
+                <div>
+                  <span style={{ color: 'var(--text-muted)' }}>Empirical Benchmark:</span>{' '}
+                  <strong style={{ color: activeMemory.is_verified ? '#34d399' : 'var(--text-muted)' }}>
+                    {activeMemory.is_verified ? 'VERIFIED' : 'UNVERIFIED'}
+                  </strong>
+                </div>
+              </div>
+
               <div>
                 <label className="label">Normalized SQL Query</label>
                 <div className="sql-box">{activeMemory.query_text}</div>

@@ -22,6 +22,13 @@ export interface SlowQueryResponse {
   count: number;
 }
 
+export interface ExplainResponse {
+  query: string;
+  plan: Record<string, any>[];
+  planning_time_ms?: number | null;
+  execution_time_ms?: number | null;
+}
+
 export interface PlanNode {
   node_type: string;
   relation_name?: string | null;
@@ -128,6 +135,16 @@ export interface SafetyAssessment {
   tradeoffs: string[];
 }
 
+export interface CandidateEvaluation {
+  candidate_index: string;
+  columns: string[];
+  index_method: string;
+  hypopg_result: HypoPGValidationResult;
+  safety_assessment: SafetyAssessment;
+  recommendation: OptimizationRecommendation;
+  is_primary: boolean;
+}
+
 export interface ApprovalRequest {
   approval_id: string;
   recommendation: OptimizationRecommendation;
@@ -196,6 +213,9 @@ export interface BenchmarkResult {
   error?: string | null;
 }
 
+export type CaseProvenance = 'measured' | 'seeded' | 'synthetic' | 'unverified';
+export type OutcomeVerificationState = 'verified_measured' | 'unverified' | 'synthetic';
+
 export interface SimilarCase {
   memory_id: number;
   similarity: number;
@@ -207,6 +227,9 @@ export interface SimilarCase {
   benchmark?: Record<string, any> | null;
   outcome: 'success' | 'no_improvement' | 'regression' | 'failed' | 'unknown';
   outcome_summary?: string | null;
+  provenance?: CaseProvenance;
+  is_verified?: boolean;
+  verification_state?: OutcomeVerificationState;
   created_at?: string | null;
 }
 
@@ -216,6 +239,7 @@ export interface RAGContext {
   similar_cases: SimilarCase[];
   retrieval_count: number;
   retrieval_threshold: number;
+  verified_only?: boolean;
 }
 
 export interface DiagnosisResult {
@@ -225,6 +249,7 @@ export interface DiagnosisResult {
   findings: BottleneckFinding[];
   recommendation?: OptimizationRecommendation | null;
   rag_context?: RAGContext | null;
+  candidate_evaluations: CandidateEvaluation[];
 }
 
 export interface DiagnoseRequest {
@@ -247,6 +272,9 @@ export interface MemoryListItem {
   query_text: string;
   outcome: 'success' | 'no_improvement' | 'regression' | 'failed' | 'unknown';
   outcome_summary?: string | null;
+  provenance?: CaseProvenance;
+  is_verified?: boolean;
+  verification_state?: OutcomeVerificationState;
   created_at?: string | null;
 }
 
@@ -262,6 +290,9 @@ export interface OptimizationMemory {
   outcome: 'success' | 'no_improvement' | 'regression' | 'failed' | 'unknown';
   outcome_summary?: string | null;
   embedding?: number[] | null;
+  provenance?: CaseProvenance;
+  is_verified?: boolean;
+  verification_state?: OutcomeVerificationState;
   created_at?: string | null;
 }
 
@@ -270,6 +301,8 @@ export interface MemorySearchRequest {
   incident_type?: string | null;
   limit?: number;
   similarity_threshold?: number;
+  verified_only?: boolean;
+  provenance?: CaseProvenance | null;
 }
 
 export interface MemorySearchResponse {

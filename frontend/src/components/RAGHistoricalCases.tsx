@@ -1,6 +1,6 @@
 import React from 'react';
 import { SimilarCase } from '../types/api';
-import { History, BrainCircuit, ArrowUpRight, CheckCircle2, TrendingUp, AlertTriangle } from 'lucide-react';
+import { History, BrainCircuit, ArrowUpRight, CheckCircle2, TrendingUp, AlertTriangle, ShieldCheck, Database } from 'lucide-react';
 
 interface RAGHistoricalCasesProps {
   cases: SimilarCase[];
@@ -64,7 +64,7 @@ export const RAGHistoricalCases: React.FC<RAGHistoricalCasesProps> = ({
                 position: 'relative',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
                 <span
                   style={{
                     fontSize: '11px',
@@ -75,7 +75,35 @@ export const RAGHistoricalCases: React.FC<RAGHistoricalCasesProps> = ({
                   memory_id: #{c.memory_id}
                 </span>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                  {c.verification_state === 'verified_measured' || c.is_verified ? (
+                    <span
+                      className="badge badge-green"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10.5px' }}
+                      title="Empirically measured outcome from real PostgreSQL execution"
+                    >
+                      <ShieldCheck size={11} />
+                      <span>VERIFIED MEASURED</span>
+                    </span>
+                  ) : c.verification_state === 'synthetic' || c.provenance === 'seeded' ? (
+                    <span
+                      className="badge badge-purple"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10.5px' }}
+                      title="Seeded reference case"
+                    >
+                      <Database size={11} />
+                      <span>SEEDED</span>
+                    </span>
+                  ) : (
+                    <span
+                      className="badge badge-neutral"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10.5px' }}
+                      title="Unverified / simulated case"
+                    >
+                      <span>UNVERIFIED</span>
+                    </span>
+                  )}
+
                   <div
                     style={{
                       display: 'flex',

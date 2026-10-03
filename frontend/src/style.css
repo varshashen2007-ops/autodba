@@ -374,6 +374,12 @@ code, pre, .font-mono {
   border: 1px solid var(--border-subtle);
 }
 
+.badge-cyan {
+  background-color: rgba(6, 182, 212, 0.12);
+  color: #22d3ee;
+  border: 1px solid rgba(6, 182, 212, 0.25);
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;

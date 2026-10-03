@@ -8,6 +8,7 @@ export const IntelligenceView: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('SELECT * FROM orders WHERE customer_id = 42;');
   const [incidentType, setIncidentType] = useState('missing_index');
   const [similarityThreshold, setSimilarityThreshold] = useState(0.0);
+  const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<SimilarCase[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
@@ -24,6 +25,7 @@ export const IntelligenceView: React.FC = () => {
         incident_type: incidentType || undefined,
         limit: 5,
         similarity_threshold: similarityThreshold,
+        verified_only: verifiedOnly || undefined,
       });
       setResults(res.results);
       setHasSearched(true);
@@ -112,6 +114,30 @@ export const IntelligenceView: React.FC = () => {
               onChange={(e) => setSimilarityThreshold(parseFloat(e.target.value))}
               style={{ width: '100%', accentColor: 'var(--accent-purple)' }}
             />
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '6px' }}>
+            <label className="label">Provenance Filter</label>
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                color: verifiedOnly ? '#22d3ee' : 'var(--text-secondary)',
+                userSelect: 'none',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={verifiedOnly}
+                onChange={(e) => setVerifiedOnly(e.target.checked)}
+                style={{ accentColor: '#22d3ee', width: '14px', height: '14px', cursor: 'pointer' }}
+              />
+              <span>Verified Measured Only (Policy C)</span>
+              {verifiedOnly && <span className="badge badge-cyan" style={{ fontSize: '10px' }}>ACTIVE</span>}
+            </label>
           </div>
         </div>
 

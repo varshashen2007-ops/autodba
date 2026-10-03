@@ -20,6 +20,7 @@ import {
 import { ExecutionPlanViewer } from '../components/ExecutionPlanViewer';
 import { BottleneckList } from '../components/BottleneckList';
 import { RecommendationCard } from '../components/RecommendationCard';
+import { CandidateEvaluationsCard } from '../components/CandidateEvaluationsCard';
 import { AIExplanationPanel } from '../components/AIExplanationPanel';
 import { RAGHistoricalCases } from '../components/RAGHistoricalCases';
 import { NavTab } from '../components/Sidebar';
@@ -98,6 +99,7 @@ export const InvestigateView: React.FC<InvestigateViewProps> = ({
   const rawPlan = analysis?.raw_plan;
   const findings = diagnosis?.findings || [];
   const recommendation = diagnosis?.recommendation as OptimizationRecommendation | null;
+  const candidateEvaluations = diagnosis?.candidate_evaluations || [];
   const ragContext = diagnosis?.rag_context;
   const similarCases = ragContext?.similar_cases || [];
 
@@ -367,8 +369,14 @@ export const InvestigateView: React.FC<InvestigateViewProps> = ({
             </div>
           </div>
 
-          {/* Section 2: Recommendation & HypoPG Simulation */}
-          {recommendation && (
+          {/* Section 2: Outcome-Aware Candidate Ranking & HypoPG Simulation */}
+          {candidateEvaluations.length > 0 ? (
+            <CandidateEvaluationsCard
+              evaluations={candidateEvaluations}
+              query={query}
+              onRequestApproval={onRequestApproval}
+            />
+          ) : recommendation ? (
             <div className="card" style={{ borderLeft: '4px solid var(--accent-blue)' }}>
               <div className="card-header">
                 <div>
@@ -389,7 +397,7 @@ export const InvestigateView: React.FC<InvestigateViewProps> = ({
                 onRequestApproval={onRequestApproval}
               />
             </div>
-          )}
+          ) : null}
 
           {/* Section 3: RAG Historical Cases */}
           {includeRag && (
